@@ -10,8 +10,6 @@ plugins:
     out: gen/ts
     include_imports: true
     opt: target=ts
-  - local: protoc-gen-doc
-    out: gen/docs
-    opt: markdown.tmpl,docs.md
-    # opt: --doc_opt=html,index.html
-    include_imports: false
+  # - local: protoc-gen-doc
+  #   out: gen
+  #   opt: "markdown.tmpl,doc.md"
