@@ -4,15 +4,18 @@
 
 import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
 import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
-import type { AuthResponse, SuccessResponse } from "./common_pb";
+import type { AuthResponse, OTPVerification } from "./common_pb";
 import { file_auth_v1_common } from "./common_pb";
+import type { SuccessResponse } from "../../common/v1/common_pb";
+import { file_common_v1_common } from "../../common/v1/common_pb";
+import { file_google_protobuf_wrappers } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file auth/v1/password.proto.
  */
 export const file_auth_v1_password: GenFile = /*@__PURE__*/
-  fileDesc("ChZhdXRoL3YxL3Bhc3N3b3JkLnByb3RvEgdhdXRoLnYxIi8KDExvZ2luUmVxdWVzdBINCgVlbWFpbBgBIAEoCRIQCghwYXNzd29yZBgCIAEoCSI0Cg1Mb2dpblJlc3BvbnNlEiMKBGF1dGgYASABKAsyFS5hdXRoLnYxLkF1dGhSZXNwb25zZSJOCg9SZWdpc3RlclJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAkSEQoEbmFtZRgDIAEoCUgAiAEBQgcKBV9uYW1lIjcKEFJlZ2lzdGVyUmVzcG9uc2USIwoEYXV0aBgBIAEoCzIVLmF1dGgudjEuQXV0aFJlc3BvbnNlIiYKFUZvcmdvdFBhc3N3b3JkUmVxdWVzdBINCgVlbWFpbBgBIAEoCSJCChZGb3Jnb3RQYXNzd29yZFJlc3BvbnNlEigKBnJlc3VsdBgBIAEoCzIYLmF1dGgudjEuU3VjY2Vzc1Jlc3BvbnNlIlYKFFJlc2V0UGFzc3dvcmRSZXF1ZXN0Eg0KBXRva2VuGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJEh0KFXBhc3N3b3JkX2NvbmZpcm1hdGlvbhgDIAEoCSJBChVSZXNldFBhc3N3b3JkUmVzcG9uc2USKAoGcmVzdWx0GAEgASgLMhguYXV0aC52MS5TdWNjZXNzUmVzcG9uc2UysQIKE0F1dGhQYXNzd29yZFNlcnZpY2USNgoFTG9naW4SFS5hdXRoLnYxLkxvZ2luUmVxdWVzdBoWLmF1dGgudjEuTG9naW5SZXNwb25zZRI/CghSZWdpc3RlchIYLmF1dGgudjEuUmVnaXN0ZXJSZXF1ZXN0GhkuYXV0aC52MS5SZWdpc3RlclJlc3BvbnNlElEKDkZvcmdvdFBhc3N3b3JkEh4uYXV0aC52MS5Gb3Jnb3RQYXNzd29yZFJlcXVlc3QaHy5hdXRoLnYxLkZvcmdvdFBhc3N3b3JkUmVzcG9uc2USTgoNUmVzZXRQYXNzd29yZBIdLmF1dGgudjEuUmVzZXRQYXNzd29yZFJlcXVlc3QaHi5hdXRoLnYxLlJlc2V0UGFzc3dvcmRSZXNwb25zZUIyWjBnaXRodWIuY29tL2F1dGhodWJkZXYvYXBpcy9nZW4vZ28vYXV0aC92MTthdXRodjFiBnByb3RvMw", [file_auth_v1_common]);
+  fileDesc("ChZhdXRoL3YxL3Bhc3N3b3JkLnByb3RvEgdhdXRoLnYxIi8KDExvZ2luUmVxdWVzdBINCgVlbWFpbBgBIAEoCRIQCghwYXNzd29yZBgCIAEoCSI0Cg1Mb2dpblJlc3BvbnNlEiMKBGF1dGgYASABKAsyFS5hdXRoLnYxLkF1dGhSZXNwb25zZSJeCg9SZWdpc3RlclJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAkSKgoEbmFtZRgDIAEoCzIcLmdvb2dsZS5wcm90b2J1Zi5TdHJpbmdWYWx1ZSI3ChBSZWdpc3RlclJlc3BvbnNlEiMKBGF1dGgYASABKAsyFS5hdXRoLnYxLkF1dGhSZXNwb25zZSIsChtSZXF1ZXN0UGFzc3dvcmRSZXNldFJlcXVlc3QSDQoFZW1haWwYASABKAkiNwocUmVxdWVzdFBhc3N3b3JkUmVzZXRSZXNwb25zZRIXCg92ZXJpZmljYXRpb25faWQYASABKAkiXAoUUmVzZXRQYXNzd29yZFJlcXVlc3QSLgoMdmVyaWZpY2F0aW9uGAEgASgLMhguYXV0aC52MS5PVFBWZXJpZmljYXRpb24SFAoMbmV3X3Bhc3N3b3JkGAIgASgJIkMKFVJlc2V0UGFzc3dvcmRSZXNwb25zZRIqCgZyZXN1bHQYASABKAsyGi5jb21tb24udjEuU3VjY2Vzc1Jlc3BvbnNlMscCCg9QYXNzd29yZFNlcnZpY2USOAoFTG9naW4SFS5hdXRoLnYxLkxvZ2luUmVxdWVzdBoWLmF1dGgudjEuTG9naW5SZXNwb25zZSIAEkEKCFJlZ2lzdGVyEhguYXV0aC52MS5SZWdpc3RlclJlcXVlc3QaGS5hdXRoLnYxLlJlZ2lzdGVyUmVzcG9uc2UiABJlChRSZXF1ZXN0UGFzc3dvcmRSZXNldBIkLmF1dGgudjEuUmVxdWVzdFBhc3N3b3JkUmVzZXRSZXF1ZXN0GiUuYXV0aC52MS5SZXF1ZXN0UGFzc3dvcmRSZXNldFJlc3BvbnNlIgASUAoNUmVzZXRQYXNzd29yZBIdLmF1dGgudjEuUmVzZXRQYXNzd29yZFJlcXVlc3QaHi5hdXRoLnYxLlJlc2V0UGFzc3dvcmRSZXNwb25zZSIAQjJaMGdpdGh1Yi5jb20vYXV0aGh1YmRldi9hcGlzL2dlbi9nby9hdXRoL3YxO2F1dGh2MWIGcHJvdG8z", [file_auth_v1_common, file_common_v1_common, file_google_protobuf_wrappers]);
 
 /**
  * LoginRequest contains credentials for authentication.
@@ -22,15 +25,13 @@ export const file_auth_v1_password: GenFile = /*@__PURE__*/
 export type LoginRequest = Message<"auth.v1.LoginRequest"> & {
   /**
    * Email address of the user.
-   * Must be a valid email format between 5 and 255 characters.
    *
    * @generated from field: string email = 1;
    */
   email: string;
 
   /**
-   * User password.
-   * Must be between 6 and 100 characters.
+   * User's password.
    *
    * @generated from field: string password = 2;
    */
@@ -45,13 +46,13 @@ export const LoginRequestSchema: GenMessage<LoginRequest> = /*@__PURE__*/
   messageDesc(file_auth_v1_password, 0);
 
 /**
- * LoginResponse contains the authentication result.
+ * LoginResponse contains authentication tokens after successful login.
  *
  * @generated from message auth.v1.LoginResponse
  */
 export type LoginResponse = Message<"auth.v1.LoginResponse"> & {
   /**
-   * Authentication data including tokens and user information.
+   * Authentication response with tokens.
    *
    * @generated from field: auth.v1.AuthResponse auth = 1;
    */
@@ -66,32 +67,29 @@ export const LoginResponseSchema: GenMessage<LoginResponse> = /*@__PURE__*/
   messageDesc(file_auth_v1_password, 1);
 
 /**
- * RegisterRequest contains information for creating a new user account.
+ * RegisterRequest contains information for creating a new account.
  *
  * @generated from message auth.v1.RegisterRequest
  */
 export type RegisterRequest = Message<"auth.v1.RegisterRequest"> & {
   /**
-   * Email address of the user.
-   * Must be a valid email format between 5 and 255 characters.
+   * Email address for the new account.
    *
    * @generated from field: string email = 1;
    */
   email: string;
 
   /**
-   * User password.
-   * Must be between 6 and 100 characters.
+   * Password for the new account.
    *
    * @generated from field: string password = 2;
    */
   password: string;
 
   /**
-   * Optional user name.
-   * If provided, must be between 2 and 100 characters.
+   * Optional display name for the user.
    *
-   * @generated from field: optional string name = 3;
+   * @generated from field: google.protobuf.StringValue name = 3;
    */
   name?: string;
 };
@@ -104,13 +102,13 @@ export const RegisterRequestSchema: GenMessage<RegisterRequest> = /*@__PURE__*/
   messageDesc(file_auth_v1_password, 2);
 
 /**
- * RegisterResponse contains the registration result.
+ * RegisterResponse contains authentication tokens after successful registration.
  *
  * @generated from message auth.v1.RegisterResponse
  */
 export type RegisterResponse = Message<"auth.v1.RegisterResponse"> & {
   /**
-   * Authentication data including tokens and user information.
+   * Authentication response with tokens.
    *
    * @generated from field: auth.v1.AuthResponse auth = 1;
    */
@@ -125,14 +123,13 @@ export const RegisterResponseSchema: GenMessage<RegisterResponse> = /*@__PURE__*
   messageDesc(file_auth_v1_password, 3);
 
 /**
- * ForgotPasswordRequest initiates password recovery.
+ * RequestPasswordResetRequest initiates the password reset process.
  *
- * @generated from message auth.v1.ForgotPasswordRequest
+ * @generated from message auth.v1.RequestPasswordResetRequest
  */
-export type ForgotPasswordRequest = Message<"auth.v1.ForgotPasswordRequest"> & {
+export type RequestPasswordResetRequest = Message<"auth.v1.RequestPasswordResetRequest"> & {
   /**
-   * Email address of the user requesting password recovery.
-   * Must be a valid email format between 5 and 255 characters.
+   * Email address of the account.
    *
    * @generated from field: string email = 1;
    */
@@ -140,63 +137,52 @@ export type ForgotPasswordRequest = Message<"auth.v1.ForgotPasswordRequest"> & {
 };
 
 /**
- * Describes the message auth.v1.ForgotPasswordRequest.
- * Use `create(ForgotPasswordRequestSchema)` to create a new message.
+ * Describes the message auth.v1.RequestPasswordResetRequest.
+ * Use `create(RequestPasswordResetRequestSchema)` to create a new message.
  */
-export const ForgotPasswordRequestSchema: GenMessage<ForgotPasswordRequest> = /*@__PURE__*/
+export const RequestPasswordResetRequestSchema: GenMessage<RequestPasswordResetRequest> = /*@__PURE__*/
   messageDesc(file_auth_v1_password, 4);
 
 /**
- * ForgotPasswordResponse indicates the password recovery process has started.
+ * RequestPasswordResetResponse confirms the password reset process has been initiated.
  *
- * @generated from message auth.v1.ForgotPasswordResponse
+ * @generated from message auth.v1.RequestPasswordResetResponse
  */
-export type ForgotPasswordResponse = Message<"auth.v1.ForgotPasswordResponse"> & {
+export type RequestPasswordResetResponse = Message<"auth.v1.RequestPasswordResetResponse"> & {
   /**
-   * Indicates whether the password recovery request was successfully processed.
-   * Note: For security reasons, this may return true even if the email doesn't exist.
+   * Verification ID to be used with the OTP.
    *
-   * @generated from field: auth.v1.SuccessResponse result = 1;
+   * @generated from field: string verification_id = 1;
    */
-  result?: SuccessResponse;
+  verificationId: string;
 };
 
 /**
- * Describes the message auth.v1.ForgotPasswordResponse.
- * Use `create(ForgotPasswordResponseSchema)` to create a new message.
+ * Describes the message auth.v1.RequestPasswordResetResponse.
+ * Use `create(RequestPasswordResetResponseSchema)` to create a new message.
  */
-export const ForgotPasswordResponseSchema: GenMessage<ForgotPasswordResponse> = /*@__PURE__*/
+export const RequestPasswordResetResponseSchema: GenMessage<RequestPasswordResetResponse> = /*@__PURE__*/
   messageDesc(file_auth_v1_password, 5);
 
 /**
- * ResetPasswordRequest contains information for resetting a password.
+ * ResetPasswordRequest contains verification and new password.
  *
  * @generated from message auth.v1.ResetPasswordRequest
  */
 export type ResetPasswordRequest = Message<"auth.v1.ResetPasswordRequest"> & {
   /**
-   * Password reset token received via email.
-   * Must not be empty.
+   * OTP verification data.
    *
-   * @generated from field: string token = 1;
+   * @generated from field: auth.v1.OTPVerification verification = 1;
    */
-  token: string;
+  verification?: OTPVerification;
 
   /**
    * New password to set.
-   * Must be between 6 and 100 characters.
    *
-   * @generated from field: string password = 2;
+   * @generated from field: string new_password = 2;
    */
-  password: string;
-
-  /**
-   * New password confirmation.
-   * Must match the password field and be between 6 and 100 characters.
-   *
-   * @generated from field: string password_confirmation = 3;
-   */
-  passwordConfirmation: string;
+  newPassword: string;
 };
 
 /**
@@ -207,15 +193,15 @@ export const ResetPasswordRequestSchema: GenMessage<ResetPasswordRequest> = /*@_
   messageDesc(file_auth_v1_password, 6);
 
 /**
- * ResetPasswordResponse indicates the result of the password reset.
+ * ResetPasswordResponse confirms the password has been reset.
  *
  * @generated from message auth.v1.ResetPasswordResponse
  */
 export type ResetPasswordResponse = Message<"auth.v1.ResetPasswordResponse"> & {
   /**
-   * Indicates whether the password was successfully reset.
+   * Operation result.
    *
-   * @generated from field: auth.v1.SuccessResponse result = 1;
+   * @generated from field: common.v1.SuccessResponse result = 1;
    */
   result?: SuccessResponse;
 };
@@ -228,16 +214,15 @@ export const ResetPasswordResponseSchema: GenMessage<ResetPasswordResponse> = /*
   messageDesc(file_auth_v1_password, 7);
 
 /**
- * AuthPasswordService provides password-based authentication operations.
+ * PasswordService provides authentication via password.
  *
- * @generated from service auth.v1.AuthPasswordService
+ * @generated from service auth.v1.PasswordService
  */
-export const AuthPasswordService: GenService<{
+export const PasswordService: GenService<{
   /**
-   * Login authenticates a user using email and password.
-   * It verifies the provided credentials and returns authentication tokens upon success.
+   * Login authenticates a user with email and password.
    *
-   * @generated from rpc auth.v1.AuthPasswordService.Login
+   * @generated from rpc auth.v1.PasswordService.Login
    */
   login: {
     methodKind: "unary";
@@ -245,11 +230,9 @@ export const AuthPasswordService: GenService<{
     output: typeof LoginResponseSchema;
   },
   /**
-   * Register creates a new user account with email and password.
-   * It performs validation on the provided data and creates a new user account.
-   * Returns authentication tokens upon successful registration.
+   * Register creates a new account with email and password.
    *
-   * @generated from rpc auth.v1.AuthPasswordService.Register
+   * @generated from rpc auth.v1.PasswordService.Register
    */
   register: {
     methodKind: "unary";
@@ -257,21 +240,19 @@ export const AuthPasswordService: GenService<{
     output: typeof RegisterResponseSchema;
   },
   /**
-   * ForgotPassword initiates the password recovery process.
-   * It sends a password reset link to the user's email address.
+   * RequestPasswordReset initiates a password reset process.
    *
-   * @generated from rpc auth.v1.AuthPasswordService.ForgotPassword
+   * @generated from rpc auth.v1.PasswordService.RequestPasswordReset
    */
-  forgotPassword: {
+  requestPasswordReset: {
     methodKind: "unary";
-    input: typeof ForgotPasswordRequestSchema;
-    output: typeof ForgotPasswordResponseSchema;
+    input: typeof RequestPasswordResetRequestSchema;
+    output: typeof RequestPasswordResetResponseSchema;
   },
   /**
-   * ResetPassword changes a user's password using a reset token.
-   * It validates the token and updates the user's password.
+   * ResetPassword completes a password reset process with OTP verification.
    *
-   * @generated from rpc auth.v1.AuthPasswordService.ResetPassword
+   * @generated from rpc auth.v1.PasswordService.ResetPassword
    */
   resetPassword: {
     methodKind: "unary";

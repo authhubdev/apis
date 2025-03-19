@@ -21,8 +21,8 @@ import (
 const _ = connect.IsAtLeastVersion1_13_0
 
 const (
-	// AuthPasswordServiceName is the fully-qualified name of the AuthPasswordService service.
-	AuthPasswordServiceName = "auth.v1.AuthPasswordService"
+	// PasswordServiceName is the fully-qualified name of the PasswordService service.
+	PasswordServiceName = "auth.v1.PasswordService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -33,182 +33,171 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// AuthPasswordServiceLoginProcedure is the fully-qualified name of the AuthPasswordService's Login
+	// PasswordServiceLoginProcedure is the fully-qualified name of the PasswordService's Login RPC.
+	PasswordServiceLoginProcedure = "/auth.v1.PasswordService/Login"
+	// PasswordServiceRegisterProcedure is the fully-qualified name of the PasswordService's Register
 	// RPC.
-	AuthPasswordServiceLoginProcedure = "/auth.v1.AuthPasswordService/Login"
-	// AuthPasswordServiceRegisterProcedure is the fully-qualified name of the AuthPasswordService's
-	// Register RPC.
-	AuthPasswordServiceRegisterProcedure = "/auth.v1.AuthPasswordService/Register"
-	// AuthPasswordServiceForgotPasswordProcedure is the fully-qualified name of the
-	// AuthPasswordService's ForgotPassword RPC.
-	AuthPasswordServiceForgotPasswordProcedure = "/auth.v1.AuthPasswordService/ForgotPassword"
-	// AuthPasswordServiceResetPasswordProcedure is the fully-qualified name of the
-	// AuthPasswordService's ResetPassword RPC.
-	AuthPasswordServiceResetPasswordProcedure = "/auth.v1.AuthPasswordService/ResetPassword"
+	PasswordServiceRegisterProcedure = "/auth.v1.PasswordService/Register"
+	// PasswordServiceRequestPasswordResetProcedure is the fully-qualified name of the PasswordService's
+	// RequestPasswordReset RPC.
+	PasswordServiceRequestPasswordResetProcedure = "/auth.v1.PasswordService/RequestPasswordReset"
+	// PasswordServiceResetPasswordProcedure is the fully-qualified name of the PasswordService's
+	// ResetPassword RPC.
+	PasswordServiceResetPasswordProcedure = "/auth.v1.PasswordService/ResetPassword"
 )
 
-// AuthPasswordServiceClient is a client for the auth.v1.AuthPasswordService service.
-type AuthPasswordServiceClient interface {
-	// Login authenticates a user using email and password.
-	// It verifies the provided credentials and returns authentication tokens upon success.
+// PasswordServiceClient is a client for the auth.v1.PasswordService service.
+type PasswordServiceClient interface {
+	// Login authenticates a user with email and password.
 	Login(context.Context, *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error)
-	// Register creates a new user account with email and password.
-	// It performs validation on the provided data and creates a new user account.
-	// Returns authentication tokens upon successful registration.
+	// Register creates a new account with email and password.
 	Register(context.Context, *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error)
-	// ForgotPassword initiates the password recovery process.
-	// It sends a password reset link to the user's email address.
-	ForgotPassword(context.Context, *connect.Request[v1.ForgotPasswordRequest]) (*connect.Response[v1.ForgotPasswordResponse], error)
-	// ResetPassword changes a user's password using a reset token.
-	// It validates the token and updates the user's password.
+	// RequestPasswordReset initiates a password reset process.
+	RequestPasswordReset(context.Context, *connect.Request[v1.RequestPasswordResetRequest]) (*connect.Response[v1.RequestPasswordResetResponse], error)
+	// ResetPassword completes a password reset process with OTP verification.
 	ResetPassword(context.Context, *connect.Request[v1.ResetPasswordRequest]) (*connect.Response[v1.ResetPasswordResponse], error)
 }
 
-// NewAuthPasswordServiceClient constructs a client for the auth.v1.AuthPasswordService service. By
-// default, it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses,
-// and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the
-// connect.WithGRPC() or connect.WithGRPCWeb() options.
+// NewPasswordServiceClient constructs a client for the auth.v1.PasswordService service. By default,
+// it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and
+// sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC()
+// or connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewAuthPasswordServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) AuthPasswordServiceClient {
+func NewPasswordServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) PasswordServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	authPasswordServiceMethods := v1.File_auth_v1_password_proto.Services().ByName("AuthPasswordService").Methods()
-	return &authPasswordServiceClient{
+	passwordServiceMethods := v1.File_auth_v1_password_proto.Services().ByName("PasswordService").Methods()
+	return &passwordServiceClient{
 		login: connect.NewClient[v1.LoginRequest, v1.LoginResponse](
 			httpClient,
-			baseURL+AuthPasswordServiceLoginProcedure,
-			connect.WithSchema(authPasswordServiceMethods.ByName("Login")),
+			baseURL+PasswordServiceLoginProcedure,
+			connect.WithSchema(passwordServiceMethods.ByName("Login")),
 			connect.WithClientOptions(opts...),
 		),
 		register: connect.NewClient[v1.RegisterRequest, v1.RegisterResponse](
 			httpClient,
-			baseURL+AuthPasswordServiceRegisterProcedure,
-			connect.WithSchema(authPasswordServiceMethods.ByName("Register")),
+			baseURL+PasswordServiceRegisterProcedure,
+			connect.WithSchema(passwordServiceMethods.ByName("Register")),
 			connect.WithClientOptions(opts...),
 		),
-		forgotPassword: connect.NewClient[v1.ForgotPasswordRequest, v1.ForgotPasswordResponse](
+		requestPasswordReset: connect.NewClient[v1.RequestPasswordResetRequest, v1.RequestPasswordResetResponse](
 			httpClient,
-			baseURL+AuthPasswordServiceForgotPasswordProcedure,
-			connect.WithSchema(authPasswordServiceMethods.ByName("ForgotPassword")),
+			baseURL+PasswordServiceRequestPasswordResetProcedure,
+			connect.WithSchema(passwordServiceMethods.ByName("RequestPasswordReset")),
 			connect.WithClientOptions(opts...),
 		),
 		resetPassword: connect.NewClient[v1.ResetPasswordRequest, v1.ResetPasswordResponse](
 			httpClient,
-			baseURL+AuthPasswordServiceResetPasswordProcedure,
-			connect.WithSchema(authPasswordServiceMethods.ByName("ResetPassword")),
+			baseURL+PasswordServiceResetPasswordProcedure,
+			connect.WithSchema(passwordServiceMethods.ByName("ResetPassword")),
 			connect.WithClientOptions(opts...),
 		),
 	}
 }
 
-// authPasswordServiceClient implements AuthPasswordServiceClient.
-type authPasswordServiceClient struct {
-	login          *connect.Client[v1.LoginRequest, v1.LoginResponse]
-	register       *connect.Client[v1.RegisterRequest, v1.RegisterResponse]
-	forgotPassword *connect.Client[v1.ForgotPasswordRequest, v1.ForgotPasswordResponse]
-	resetPassword  *connect.Client[v1.ResetPasswordRequest, v1.ResetPasswordResponse]
+// passwordServiceClient implements PasswordServiceClient.
+type passwordServiceClient struct {
+	login                *connect.Client[v1.LoginRequest, v1.LoginResponse]
+	register             *connect.Client[v1.RegisterRequest, v1.RegisterResponse]
+	requestPasswordReset *connect.Client[v1.RequestPasswordResetRequest, v1.RequestPasswordResetResponse]
+	resetPassword        *connect.Client[v1.ResetPasswordRequest, v1.ResetPasswordResponse]
 }
 
-// Login calls auth.v1.AuthPasswordService.Login.
-func (c *authPasswordServiceClient) Login(ctx context.Context, req *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error) {
+// Login calls auth.v1.PasswordService.Login.
+func (c *passwordServiceClient) Login(ctx context.Context, req *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error) {
 	return c.login.CallUnary(ctx, req)
 }
 
-// Register calls auth.v1.AuthPasswordService.Register.
-func (c *authPasswordServiceClient) Register(ctx context.Context, req *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error) {
+// Register calls auth.v1.PasswordService.Register.
+func (c *passwordServiceClient) Register(ctx context.Context, req *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error) {
 	return c.register.CallUnary(ctx, req)
 }
 
-// ForgotPassword calls auth.v1.AuthPasswordService.ForgotPassword.
-func (c *authPasswordServiceClient) ForgotPassword(ctx context.Context, req *connect.Request[v1.ForgotPasswordRequest]) (*connect.Response[v1.ForgotPasswordResponse], error) {
-	return c.forgotPassword.CallUnary(ctx, req)
+// RequestPasswordReset calls auth.v1.PasswordService.RequestPasswordReset.
+func (c *passwordServiceClient) RequestPasswordReset(ctx context.Context, req *connect.Request[v1.RequestPasswordResetRequest]) (*connect.Response[v1.RequestPasswordResetResponse], error) {
+	return c.requestPasswordReset.CallUnary(ctx, req)
 }
 
-// ResetPassword calls auth.v1.AuthPasswordService.ResetPassword.
-func (c *authPasswordServiceClient) ResetPassword(ctx context.Context, req *connect.Request[v1.ResetPasswordRequest]) (*connect.Response[v1.ResetPasswordResponse], error) {
+// ResetPassword calls auth.v1.PasswordService.ResetPassword.
+func (c *passwordServiceClient) ResetPassword(ctx context.Context, req *connect.Request[v1.ResetPasswordRequest]) (*connect.Response[v1.ResetPasswordResponse], error) {
 	return c.resetPassword.CallUnary(ctx, req)
 }
 
-// AuthPasswordServiceHandler is an implementation of the auth.v1.AuthPasswordService service.
-type AuthPasswordServiceHandler interface {
-	// Login authenticates a user using email and password.
-	// It verifies the provided credentials and returns authentication tokens upon success.
+// PasswordServiceHandler is an implementation of the auth.v1.PasswordService service.
+type PasswordServiceHandler interface {
+	// Login authenticates a user with email and password.
 	Login(context.Context, *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error)
-	// Register creates a new user account with email and password.
-	// It performs validation on the provided data and creates a new user account.
-	// Returns authentication tokens upon successful registration.
+	// Register creates a new account with email and password.
 	Register(context.Context, *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error)
-	// ForgotPassword initiates the password recovery process.
-	// It sends a password reset link to the user's email address.
-	ForgotPassword(context.Context, *connect.Request[v1.ForgotPasswordRequest]) (*connect.Response[v1.ForgotPasswordResponse], error)
-	// ResetPassword changes a user's password using a reset token.
-	// It validates the token and updates the user's password.
+	// RequestPasswordReset initiates a password reset process.
+	RequestPasswordReset(context.Context, *connect.Request[v1.RequestPasswordResetRequest]) (*connect.Response[v1.RequestPasswordResetResponse], error)
+	// ResetPassword completes a password reset process with OTP verification.
 	ResetPassword(context.Context, *connect.Request[v1.ResetPasswordRequest]) (*connect.Response[v1.ResetPasswordResponse], error)
 }
 
-// NewAuthPasswordServiceHandler builds an HTTP handler from the service implementation. It returns
-// the path on which to mount the handler and the handler itself.
+// NewPasswordServiceHandler builds an HTTP handler from the service implementation. It returns the
+// path on which to mount the handler and the handler itself.
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewAuthPasswordServiceHandler(svc AuthPasswordServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	authPasswordServiceMethods := v1.File_auth_v1_password_proto.Services().ByName("AuthPasswordService").Methods()
-	authPasswordServiceLoginHandler := connect.NewUnaryHandler(
-		AuthPasswordServiceLoginProcedure,
+func NewPasswordServiceHandler(svc PasswordServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	passwordServiceMethods := v1.File_auth_v1_password_proto.Services().ByName("PasswordService").Methods()
+	passwordServiceLoginHandler := connect.NewUnaryHandler(
+		PasswordServiceLoginProcedure,
 		svc.Login,
-		connect.WithSchema(authPasswordServiceMethods.ByName("Login")),
+		connect.WithSchema(passwordServiceMethods.ByName("Login")),
 		connect.WithHandlerOptions(opts...),
 	)
-	authPasswordServiceRegisterHandler := connect.NewUnaryHandler(
-		AuthPasswordServiceRegisterProcedure,
+	passwordServiceRegisterHandler := connect.NewUnaryHandler(
+		PasswordServiceRegisterProcedure,
 		svc.Register,
-		connect.WithSchema(authPasswordServiceMethods.ByName("Register")),
+		connect.WithSchema(passwordServiceMethods.ByName("Register")),
 		connect.WithHandlerOptions(opts...),
 	)
-	authPasswordServiceForgotPasswordHandler := connect.NewUnaryHandler(
-		AuthPasswordServiceForgotPasswordProcedure,
-		svc.ForgotPassword,
-		connect.WithSchema(authPasswordServiceMethods.ByName("ForgotPassword")),
+	passwordServiceRequestPasswordResetHandler := connect.NewUnaryHandler(
+		PasswordServiceRequestPasswordResetProcedure,
+		svc.RequestPasswordReset,
+		connect.WithSchema(passwordServiceMethods.ByName("RequestPasswordReset")),
 		connect.WithHandlerOptions(opts...),
 	)
-	authPasswordServiceResetPasswordHandler := connect.NewUnaryHandler(
-		AuthPasswordServiceResetPasswordProcedure,
+	passwordServiceResetPasswordHandler := connect.NewUnaryHandler(
+		PasswordServiceResetPasswordProcedure,
 		svc.ResetPassword,
-		connect.WithSchema(authPasswordServiceMethods.ByName("ResetPassword")),
+		connect.WithSchema(passwordServiceMethods.ByName("ResetPassword")),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/auth.v1.AuthPasswordService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/auth.v1.PasswordService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case AuthPasswordServiceLoginProcedure:
-			authPasswordServiceLoginHandler.ServeHTTP(w, r)
-		case AuthPasswordServiceRegisterProcedure:
-			authPasswordServiceRegisterHandler.ServeHTTP(w, r)
-		case AuthPasswordServiceForgotPasswordProcedure:
-			authPasswordServiceForgotPasswordHandler.ServeHTTP(w, r)
-		case AuthPasswordServiceResetPasswordProcedure:
-			authPasswordServiceResetPasswordHandler.ServeHTTP(w, r)
+		case PasswordServiceLoginProcedure:
+			passwordServiceLoginHandler.ServeHTTP(w, r)
+		case PasswordServiceRegisterProcedure:
+			passwordServiceRegisterHandler.ServeHTTP(w, r)
+		case PasswordServiceRequestPasswordResetProcedure:
+			passwordServiceRequestPasswordResetHandler.ServeHTTP(w, r)
+		case PasswordServiceResetPasswordProcedure:
+			passwordServiceResetPasswordHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
 	})
 }
 
-// UnimplementedAuthPasswordServiceHandler returns CodeUnimplemented from all methods.
-type UnimplementedAuthPasswordServiceHandler struct{}
+// UnimplementedPasswordServiceHandler returns CodeUnimplemented from all methods.
+type UnimplementedPasswordServiceHandler struct{}
 
-func (UnimplementedAuthPasswordServiceHandler) Login(context.Context, *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthPasswordService.Login is not implemented"))
+func (UnimplementedPasswordServiceHandler) Login(context.Context, *connect.Request[v1.LoginRequest]) (*connect.Response[v1.LoginResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.PasswordService.Login is not implemented"))
 }
 
-func (UnimplementedAuthPasswordServiceHandler) Register(context.Context, *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthPasswordService.Register is not implemented"))
+func (UnimplementedPasswordServiceHandler) Register(context.Context, *connect.Request[v1.RegisterRequest]) (*connect.Response[v1.RegisterResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.PasswordService.Register is not implemented"))
 }
 
-func (UnimplementedAuthPasswordServiceHandler) ForgotPassword(context.Context, *connect.Request[v1.ForgotPasswordRequest]) (*connect.Response[v1.ForgotPasswordResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthPasswordService.ForgotPassword is not implemented"))
+func (UnimplementedPasswordServiceHandler) RequestPasswordReset(context.Context, *connect.Request[v1.RequestPasswordResetRequest]) (*connect.Response[v1.RequestPasswordResetResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.PasswordService.RequestPasswordReset is not implemented"))
 }
 
-func (UnimplementedAuthPasswordServiceHandler) ResetPassword(context.Context, *connect.Request[v1.ResetPasswordRequest]) (*connect.Response[v1.ResetPasswordResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthPasswordService.ResetPassword is not implemented"))
+func (UnimplementedPasswordServiceHandler) ResetPassword(context.Context, *connect.Request[v1.ResetPasswordRequest]) (*connect.Response[v1.ResetPasswordResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.PasswordService.ResetPassword is not implemented"))
 }

@@ -3,198 +3,128 @@ syntax = "proto3";
 package auth.v1;
 
 import "auth/v1/common.proto";
+import "common/v1/common.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 option go_package = "github.com/authhubdev/apis/gen/go/auth/v1;authv1";
 
-// DeviceType represents the type of device used for authentication.
-enum DeviceType {
-  // Default value for proto3
-  DEVICE_TYPE_UNSPECIFIED = 0;
-  // Desktop computer
-  DEVICE_TYPE_DESKTOP = 1;
-  // Mobile phone
-  DEVICE_TYPE_MOBILE = 2;
-  // Tablet device
-  DEVICE_TYPE_TABLET = 3;
-  // Other/unknown device type
-  DEVICE_TYPE_OTHER = 4;
+// SessionService provides management of user sessions.
+service SessionService {
+  // GetSession retrieves details about the current session.
+  rpc GetSession(GetSessionRequest) returns (GetSessionResponse) {}
+  
+  // ListSessions retrieves all active sessions for the current user.
+  rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse) {}
+  
+  // RevokeSession terminates a specific session by its ID.
+  rpc RevokeSession(RevokeSessionRequest) returns (RevokeSessionResponse) {}
+  
+  // RevokeAllSessions terminates all sessions for the current user.
+  rpc RevokeAllSessions(RevokeAllSessionsRequest) returns (RevokeAllSessionsResponse) {}
+  
+  // RevokeOtherSessions terminates all sessions except the current one.
+  rpc RevokeOtherSessions(RevokeOtherSessionsRequest) returns (RevokeOtherSessionsResponse) {}
+  
+  // RefreshToken refreshes an expired token using a refresh token.
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {}
 }
 
-// OperatingSystem represents the operating system of the device.
-enum OperatingSystem {
-  // Default value for proto3
-  OPERATING_SYSTEM_UNSPECIFIED = 0;
-  // macOS operating system
-  OPERATING_SYSTEM_MACOS = 1;
-  // Windows operating system
-  OPERATING_SYSTEM_WINDOWS = 2;
-  // iOS mobile operating system
-  OPERATING_SYSTEM_IOS = 3;
-  // Android mobile operating system
-  OPERATING_SYSTEM_ANDROID = 4;
-  // Linux operating system
-  OPERATING_SYSTEM_LINUX = 5;
-  // ChromeOS operating system
-  OPERATING_SYSTEM_CHROMEOS = 6;
-  // Other/unknown operating system
-  OPERATING_SYSTEM_OTHER = 7;
-}
-
-// AuthSessionService provides session management operations.
-service AuthSessionService {
-  // GetSession retrieves information about the current authenticated session.
-  // It validates the provided token and returns session details.
-  rpc GetSession(GetSessionRequest) returns (GetSessionResponse);
-
-  // RefreshSession generates new authentication tokens using a refresh token.
-  // It validates the refresh token and issues a new access token.
-  rpc RefreshSession(RefreshSessionRequest) returns (RefreshSessionResponse);
-
-  // RevokeSession invalidates a specific session.
-  // This can be used when a user logs out from a specific device.
-  rpc RevokeSession(RevokeSessionRequest) returns (RevokeSessionResponse);
-
-  // ListSessions returns all active sessions for a user.
-  // This can be used to show users all devices where they're currently logged in.
-  rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse);
-
-  // RevokeAllSessions invalidates all sessions for a user.
-  // This can be used for security purposes or when a user wants to log out from all devices.
-  rpc RevokeAllSessions(RevokeAllSessionsRequest) returns (RevokeAllSessionsResponse);
-}
-
-// SessionInfo contains information about an authentication session.
-message SessionInfo {
+// Session contains information about a user's authentication session.
+message Session {
   // Unique identifier for the session.
-  string session_id = 1;
+  string id = 1;
   
   // User ID associated with the session.
   string user_id = 2;
   
   // IP address from which the session was created.
-  string ip_address = 3;
+  string ip = 3;
   
-  // User agent information (browser, device, etc.).
+  // User agent (browser/device) information.
   string user_agent = 4;
   
-  // Device type (e.g., "Desktop", "Mobile", "Tablet").
-  DeviceType device_type = 5;
+  // Location information derived from the IP.
+  string location = 5;
   
-  // Operating system (e.g., "macOS", "Windows", "iOS", "Android").
-  OperatingSystem operating_system = 6;
+  // Whether this is the current active session.
+  bool current = 6;
   
-  // Browser name (e.g., "Chrome", "Firefox", "Safari").
-  string browser = 7;
+  // Creation timestamp.
+  google.protobuf.Timestamp created_at = 7;
   
-  // Browser version (e.g., "115.0.5790").
-  string browser_version = 8;
+  // Expiration timestamp.
+  google.protobuf.Timestamp expires_at = 8;
   
-  // Device model when available (e.g., "iPhone 14", "Pixel 7").
-  optional string device_model = 9;
-  
-  // Location information based on IP address (e.g., "San Francisco, US").
-  optional string location = 10;
-  
-  // Creation timestamp of the session.
-  int64 created_at = 11;
-  
-  // Last activity timestamp for the session.
-  int64 last_activity_at = 12;
-  
-  // Expiration timestamp of the session.
-  int64 expires_at = 13;
-  
-  // Indicates whether this is the current active session.
-  // This is useful when listing multiple sessions to identify the current one.
-  bool is_current = 14;
+  // Last access timestamp.
+  google.protobuf.Timestamp last_accessed_at = 9;
 }
 
-// GetSessionRequest contains the token to retrieve session information.
+// GetSessionRequest is used to retrieve the current session information.
 message GetSessionRequest {
-  // Authentication token for the session.
-  // Must not be empty.
-  string token = 1;
 }
 
-// GetSessionResponse contains information about the session.
+// GetSessionResponse contains the current session details.
 message GetSessionResponse {
-  // Session information.
-  SessionInfo session = 1;
-  
-  // User information associated with the session.
-  UserInfo user = 2;
+  // Current session information.
+  Session session = 1;
 }
 
-// RefreshSessionRequest contains the refresh token to get new auth tokens.
-message RefreshSessionRequest {
-  // Refresh token received during previous authentication.
-  // Must not be empty.
+// ListSessionsRequest is used to retrieve all active sessions.
+message ListSessionsRequest {
+}
+
+// ListSessionsResponse contains a list of all active sessions.
+message ListSessionsResponse {
+  // List of active sessions.
+  repeated Session sessions = 1;
+  
+  // Total count of active sessions.
+  uint32 total = 2;
+}
+
+// RevokeSessionRequest is used to terminate a specific session.
+message RevokeSessionRequest {
+  // ID of the session to revoke.
+  google.protobuf.StringValue session_id = 1;
+}
+
+// RevokeSessionResponse confirms the session termination.
+message RevokeSessionResponse {
+  // Operation result.
+  common.v1.SuccessResponse result = 1;
+}
+
+// RevokeAllSessionsRequest is used to terminate all sessions.
+message RevokeAllSessionsRequest {
+  // Whether to keep the current session active.
+  google.protobuf.BoolValue keep_current = 1;
+}
+
+// RevokeAllSessionsResponse confirms all sessions were terminated.
+message RevokeAllSessionsResponse {
+  // Operation result.
+  common.v1.SuccessResponse result = 1;
+}
+
+// RevokeOtherSessionsRequest is used to terminate all sessions except the current one.
+message RevokeOtherSessionsRequest {
+}
+
+// RevokeOtherSessionsResponse confirms other sessions were terminated.
+message RevokeOtherSessionsResponse {
+  // Operation result.
+  common.v1.SuccessResponse result = 1;
+}
+
+// RefreshTokenRequest is used to refresh an expired authentication token.
+message RefreshTokenRequest {
+  // Refresh token obtained during login or previous refresh.
   string refresh_token = 1;
 }
 
-// RefreshSessionResponse contains new authentication tokens.
-message RefreshSessionResponse {
+// RefreshTokenResponse contains the new authentication tokens.
+message RefreshTokenResponse {
   // New authentication tokens.
-  AuthTokens tokens = 1;
-}
-
-// RevokeSessionRequest contains information for revoking a session.
-message RevokeSessionRequest {
-  // Session ID to revoke.
-  // Either session_id or token must be provided.
-  optional string session_id = 1;
-  
-  // Authentication token for the session to revoke.
-  // Either session_id or token must be provided.
-  optional string token = 2;
-}
-
-// RevokeSessionResponse indicates the result of the session revocation.
-message RevokeSessionResponse {
-  // Indicates whether the session was successfully revoked.
-  SuccessResponse result = 1;
-}
-
-// ListSessionsRequest requests all active sessions for a user.
-message ListSessionsRequest {
-  // User ID for which to list sessions.
-  // If not provided, the user associated with the token will be used.
-  optional string user_id = 1;
-  
-  // Authentication token.
-  // If user_id is not provided, this must be provided.
-  optional string token = 2;
-}
-
-// ListSessionsResponse contains a list of active sessions.
-message ListSessionsResponse {
-  // List of active sessions.
-  repeated SessionInfo sessions = 1;
-  
-  // Total number of active sessions.
-  int32 total = 2;
-}
-
-// RevokeAllSessionsRequest contains information for revoking all user sessions.
-message RevokeAllSessionsRequest {
-  // User ID for which to revoke all sessions.
-  // If not provided, the user associated with the token will be used.
-  optional string user_id = 1;
-  
-  // Authentication token.
-  // If user_id is not provided, this must be provided.
-  // This session will also be revoked unless keep_current is true.
-  optional string token = 2;
-  
-  // If true, the current session (identified by token) will not be revoked.
-  optional bool keep_current = 3;
-}
-
-// RevokeAllSessionsResponse indicates the result of revoking all sessions.
-message RevokeAllSessionsResponse {
-  // Indicates whether all sessions were successfully revoked.
-  SuccessResponse result = 1;
-  
-  // Number of sessions revoked.
-  int32 revoked_count = 2;
+  AuthResponse auth = 1;
 }

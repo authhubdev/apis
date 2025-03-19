@@ -4,54 +4,43 @@
 
 import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
 import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
-import type { AuthResponse, SuccessResponse } from "./common_pb";
+import type { AuthResponse, OTPVerification } from "./common_pb";
 import { file_auth_v1_common } from "./common_pb";
+import { file_google_protobuf_wrappers } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file auth/v1/magic_link.proto.
  */
 export const file_auth_v1_magic_link: GenFile = /*@__PURE__*/
-  fileDesc("ChhhdXRoL3YxL21hZ2ljX2xpbmsucHJvdG8SB2F1dGgudjEilwEKFFNlbmRNYWdpY0xpbmtSZXF1ZXN0Eg0KBWVtYWlsGAEgASgJEhEKBG5hbWUYAiABKAlIAIgBARIZCgxyZWRpcmVjdF91cmwYAyABKAlIAYgBARIYCgt0dGxfc2Vjb25kcxgEIAEoBUgCiAEBQgcKBV9uYW1lQg8KDV9yZWRpcmVjdF91cmxCDgoMX3R0bF9zZWNvbmRzIrUBChVTZW5kTWFnaWNMaW5rUmVzcG9uc2USKAoGcmVzdWx0GAEgASgLMhguYXV0aC52MS5TdWNjZXNzUmVzcG9uc2USFwoKZXhwaXJlc19hdBgCIAEoA0gAiAEBEhgKC2lzX25ld191c2VyGAMgASgISAGIAQESFAoHdXNlcl9pZBgEIAEoCUgCiAEBQg0KC19leHBpcmVzX2F0Qg4KDF9pc19uZXdfdXNlckIKCghfdXNlcl9pZCInChZWZXJpZnlNYWdpY0xpbmtSZXF1ZXN0Eg0KBXRva2VuGAEgASgJIj4KF1ZlcmlmeU1hZ2ljTGlua1Jlc3BvbnNlEiMKBGF1dGgYASABKAsyFS5hdXRoLnYxLkF1dGhSZXNwb25zZTK8AQoUQXV0aE1hZ2ljTGlua1NlcnZpY2USTgoNU2VuZE1hZ2ljTGluaxIdLmF1dGgudjEuU2VuZE1hZ2ljTGlua1JlcXVlc3QaHi5hdXRoLnYxLlNlbmRNYWdpY0xpbmtSZXNwb25zZRJUCg9WZXJpZnlNYWdpY0xpbmsSHy5hdXRoLnYxLlZlcmlmeU1hZ2ljTGlua1JlcXVlc3QaIC5hdXRoLnYxLlZlcmlmeU1hZ2ljTGlua1Jlc3BvbnNlQjJaMGdpdGh1Yi5jb20vYXV0aGh1YmRldi9hcGlzL2dlbi9nby9hdXRoL3YxO2F1dGh2MWIGcHJvdG8z", [file_auth_v1_common]);
+  fileDesc("ChhhdXRoL3YxL21hZ2ljX2xpbmsucHJvdG8SB2F1dGgudjEihQEKFFNlbmRNYWdpY0xpbmtSZXF1ZXN0Eg0KBWVtYWlsGAEgASgJEioKBG5hbWUYAiABKAsyHC5nb29nbGUucHJvdG9idWYuU3RyaW5nVmFsdWUSMgoMcmVkaXJlY3RfdXJsGAMgASgLMhwuZ29vZ2xlLnByb3RvYnVmLlN0cmluZ1ZhbHVlIkUKFVNlbmRNYWdpY0xpbmtSZXNwb25zZRIXCg92ZXJpZmljYXRpb25faWQYASABKAkSEwoLaXNfbmV3X3VzZXIYAiABKAgiSAoWVmVyaWZ5TWFnaWNMaW5rUmVxdWVzdBIuCgx2ZXJpZmljYXRpb24YASABKAsyGC5hdXRoLnYxLk9UUFZlcmlmaWNhdGlvbiI+ChdWZXJpZnlNYWdpY0xpbmtSZXNwb25zZRIjCgRhdXRoGAEgASgLMhUuYXV0aC52MS5BdXRoUmVzcG9uc2UyvAEKEE1hZ2ljTGlua1NlcnZpY2USUAoNU2VuZE1hZ2ljTGluaxIdLmF1dGgudjEuU2VuZE1hZ2ljTGlua1JlcXVlc3QaHi5hdXRoLnYxLlNlbmRNYWdpY0xpbmtSZXNwb25zZSIAElYKD1ZlcmlmeU1hZ2ljTGluaxIfLmF1dGgudjEuVmVyaWZ5TWFnaWNMaW5rUmVxdWVzdBogLmF1dGgudjEuVmVyaWZ5TWFnaWNMaW5rUmVzcG9uc2UiAEIyWjBnaXRodWIuY29tL2F1dGhodWJkZXYvYXBpcy9nZW4vZ28vYXV0aC92MTthdXRodjFiBnByb3RvMw", [file_auth_v1_common, file_google_protobuf_wrappers]);
 
 /**
- * SendMagicLinkRequest contains information for generating a magic link.
+ * SendMagicLinkRequest is used to request a magic link for authentication.
  *
  * @generated from message auth.v1.SendMagicLinkRequest
  */
 export type SendMagicLinkRequest = Message<"auth.v1.SendMagicLinkRequest"> & {
   /**
-   * Email address of the user.
-   * Must be a valid email format between 5 and 255 characters.
+   * Email address to send the magic link to.
    *
    * @generated from field: string email = 1;
    */
   email: string;
 
   /**
-   * Optional user name.
-   * If provided, must be between 2 and 100 characters.
-   * Only used when creating a new user account.
+   * Optional name for new users.
    *
-   * @generated from field: optional string name = 2;
+   * @generated from field: google.protobuf.StringValue name = 2;
    */
   name?: string;
 
   /**
-   * Optional redirect URL after successful authentication.
-   * If provided, user will be redirected to this URL with the token as a parameter.
+   * Optional redirect URL after successful verification.
    *
-   * @generated from field: optional string redirect_url = 3;
+   * @generated from field: google.protobuf.StringValue redirect_url = 3;
    */
   redirectUrl?: string;
-
-  /**
-   * Optional time-to-live for the magic link in seconds.
-   * If not provided, a default value will be used.
-   *
-   * @generated from field: optional int32 ttl_seconds = 4;
-   */
-  ttlSeconds?: number;
 };
 
 /**
@@ -62,41 +51,24 @@ export const SendMagicLinkRequestSchema: GenMessage<SendMagicLinkRequest> = /*@_
   messageDesc(file_auth_v1_magic_link, 0);
 
 /**
- * SendMagicLinkResponse indicates the magic link generation result.
+ * SendMagicLinkResponse confirms that a magic link was sent.
  *
  * @generated from message auth.v1.SendMagicLinkResponse
  */
 export type SendMagicLinkResponse = Message<"auth.v1.SendMagicLinkResponse"> & {
   /**
-   * Indicates whether the magic link was successfully generated and sent.
-   * Note: For security reasons, this may return true even if the email doesn't exist.
+   * Verification ID to be used with the OTP.
    *
-   * @generated from field: auth.v1.SuccessResponse result = 1;
+   * @generated from field: string verification_id = 1;
    */
-  result?: SuccessResponse;
+  verificationId: string;
 
   /**
-   * Optional expiration time in Unix timestamp format.
+   * Indicates if a new user was created.
    *
-   * @generated from field: optional int64 expires_at = 2;
+   * @generated from field: bool is_new_user = 2;
    */
-  expiresAt?: bigint;
-
-  /**
-   * Indicates whether a new user account was created.
-   * Will be true for new registrations, false for existing users.
-   *
-   * @generated from field: optional bool is_new_user = 3;
-   */
-  isNewUser?: boolean;
-
-  /**
-   * User ID of the user.
-   * Only provided for new user registrations.
-   *
-   * @generated from field: optional string user_id = 4;
-   */
-  userId?: string;
+  isNewUser: boolean;
 };
 
 /**
@@ -107,18 +79,17 @@ export const SendMagicLinkResponseSchema: GenMessage<SendMagicLinkResponse> = /*
   messageDesc(file_auth_v1_magic_link, 1);
 
 /**
- * VerifyMagicLinkRequest contains the token for verification.
+ * VerifyMagicLinkRequest is used to verify a magic link.
  *
  * @generated from message auth.v1.VerifyMagicLinkRequest
  */
 export type VerifyMagicLinkRequest = Message<"auth.v1.VerifyMagicLinkRequest"> & {
   /**
-   * Magic link token received via email.
-   * Must not be empty.
+   * OTP verification data.
    *
-   * @generated from field: string token = 1;
+   * @generated from field: auth.v1.OTPVerification verification = 1;
    */
-  token: string;
+  verification?: OTPVerification;
 };
 
 /**
@@ -129,13 +100,13 @@ export const VerifyMagicLinkRequestSchema: GenMessage<VerifyMagicLinkRequest> = 
   messageDesc(file_auth_v1_magic_link, 2);
 
 /**
- * VerifyMagicLinkResponse contains the authentication result.
+ * VerifyMagicLinkResponse returns authentication tokens after successful verification.
  *
  * @generated from message auth.v1.VerifyMagicLinkResponse
  */
 export type VerifyMagicLinkResponse = Message<"auth.v1.VerifyMagicLinkResponse"> & {
   /**
-   * Authentication data including tokens and user information.
+   * Authentication tokens for the user.
    *
    * @generated from field: auth.v1.AuthResponse auth = 1;
    */
@@ -150,18 +121,16 @@ export const VerifyMagicLinkResponseSchema: GenMessage<VerifyMagicLinkResponse> 
   messageDesc(file_auth_v1_magic_link, 3);
 
 /**
- * AuthMagicLinkService provides magic link-based authentication operations.
+ * MagicLinkService provides authentication via magic links.
  *
- * @generated from service auth.v1.AuthMagicLinkService
+ * @generated from service auth.v1.MagicLinkService
  */
-export const AuthMagicLinkService: GenService<{
+export const MagicLinkService: GenService<{
   /**
-   * SendMagicLink initiates the magic link authentication process.
-   * It generates a secure link and sends it to the user's email address.
-   * This method handles both login and registration - if the user doesn't exist,
-   * a new account will be created automatically.
+   * SendMagicLink sends a magic link to the specified email.
+   * If the email doesn't exist, a new account will be created.
    *
-   * @generated from rpc auth.v1.AuthMagicLinkService.SendMagicLink
+   * @generated from rpc auth.v1.MagicLinkService.SendMagicLink
    */
   sendMagicLink: {
     methodKind: "unary";
@@ -169,10 +138,9 @@ export const AuthMagicLinkService: GenService<{
     output: typeof SendMagicLinkResponseSchema;
   },
   /**
-   * VerifyMagicLink authenticates a user using a magic link token.
-   * It verifies the provided token and returns authentication tokens upon success.
+   * VerifyMagicLink validates the magic link OTP and returns auth tokens.
    *
-   * @generated from rpc auth.v1.AuthMagicLinkService.VerifyMagicLink
+   * @generated from rpc auth.v1.MagicLinkService.VerifyMagicLink
    */
   verifyMagicLink: {
     methodKind: "unary";

@@ -4,13 +4,47 @@
 
 import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
 import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv1";
+import type { SuccessResponse as SuccessResponse$1 } from "../../common/v1/common_pb";
+import { file_common_v1_common } from "../../common/v1/common_pb";
+import type { Timestamp } from "@bufbuild/protobuf/wkt";
+import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file auth/v1/common.proto.
  */
 export const file_auth_v1_common: GenFile = /*@__PURE__*/
-  fileDesc("ChRhdXRoL3YxL2NvbW1vbi5wcm90bxIHYXV0aC52MSJGCgpBdXRoVG9rZW5zEg0KBXRva2VuGAEgASgJEhIKCmV4cGlyZXNfYXQYAiABKAMSFQoNcmVmcmVzaF90b2tlbhgDIAEoCSKGAQoIVXNlckluZm8SDwoHdXNlcl9pZBgBIAEoCRINCgVlbWFpbBgCIAEoCRIRCgRuYW1lGAMgASgJSACIAQESFgoOZW1haWxfdmVyaWZpZWQYBCABKAgSEgoKY3JlYXRlZF9hdBgFIAEoAxISCgp1cGRhdGVkX2F0GAYgASgDQgcKBV9uYW1lImkKDEF1dGhSZXNwb25zZRIjCgZ0b2tlbnMYASABKAsyEy5hdXRoLnYxLkF1dGhUb2tlbnMSHwoEdXNlchgCIAEoCzIRLmF1dGgudjEuVXNlckluZm8SEwoLaXNfbmV3X3VzZXIYAyABKAgiRAoPU3VjY2Vzc1Jlc3BvbnNlEg8KB3N1Y2Nlc3MYASABKAgSFAoHbWVzc2FnZRgCIAEoCUgAiAEBQgoKCF9tZXNzYWdlQjJaMGdpdGh1Yi5jb20vYXV0aGh1YmRldi9hcGlzL2dlbi9nby9hdXRoL3YxO2F1dGh2MWIGcHJvdG8z");
+  fileDesc("ChRhdXRoL3YxL2NvbW1vbi5wcm90bxIHYXV0aC52MSI3Cg9PVFBWZXJpZmljYXRpb24SCwoDb3RwGAEgASgJEhcKD3ZlcmlmaWNhdGlvbl9pZBgCIAEoCSJiCgpBdXRoVG9rZW5zEg0KBXRva2VuGAEgASgJEi4KCmV4cGlyZXNfYXQYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhUKDXJlZnJlc2hfdG9rZW4YAyABKAkiSAoMQXV0aFJlc3BvbnNlEiMKBnRva2VucxgBIAEoCzITLmF1dGgudjEuQXV0aFRva2VucxITCgtpc19uZXdfdXNlchgCIAEoCCJDCg9TdWNjZXNzUmVzcG9uc2USLAoIcmVzcG9uc2UYASABKAsyGi5jb21tb24udjEuU3VjY2Vzc1Jlc3BvbnNlOgIYAUIyWjBnaXRodWIuY29tL2F1dGhodWJkZXYvYXBpcy9nZW4vZ28vYXV0aC92MTthdXRodjFiBnByb3RvMw", [file_common_v1_common, file_google_protobuf_timestamp]);
+
+/**
+ * OTPVerification is a standard message for OTP verification requests.
+ *
+ * @generated from message auth.v1.OTPVerification
+ */
+export type OTPVerification = Message<"auth.v1.OTPVerification"> & {
+  /**
+   * One-Time Password (OTP) received via email or SMS.
+   * Must not be empty.
+   *
+   * @generated from field: string otp = 1;
+   */
+  otp: string;
+
+  /**
+   * Verification ID associated with the OTP.
+   * Must not be empty.
+   *
+   * @generated from field: string verification_id = 2;
+   */
+  verificationId: string;
+};
+
+/**
+ * Describes the message auth.v1.OTPVerification.
+ * Use `create(OTPVerificationSchema)` to create a new message.
+ */
+export const OTPVerificationSchema: GenMessage<OTPVerification> = /*@__PURE__*/
+  messageDesc(file_auth_v1_common, 0);
 
 /**
  * AuthTokens contains standard authentication tokens returned by auth operations.
@@ -26,11 +60,11 @@ export type AuthTokens = Message<"auth.v1.AuthTokens"> & {
   token: string;
 
   /**
-   * Token expiration time in Unix timestamp format.
+   * Token expiration time.
    *
-   * @generated from field: int64 expires_at = 2;
+   * @generated from field: google.protobuf.Timestamp expires_at = 2;
    */
-  expiresAt: bigint;
+  expiresAt?: Timestamp;
 
   /**
    * Refresh token for obtaining a new access token when the current one expires.
@@ -45,66 +79,10 @@ export type AuthTokens = Message<"auth.v1.AuthTokens"> & {
  * Use `create(AuthTokensSchema)` to create a new message.
  */
 export const AuthTokensSchema: GenMessage<AuthTokens> = /*@__PURE__*/
-  messageDesc(file_auth_v1_common, 0);
-
-/**
- * UserInfo contains basic user information returned by auth operations.
- *
- * @generated from message auth.v1.UserInfo
- */
-export type UserInfo = Message<"auth.v1.UserInfo"> & {
-  /**
-   * Unique identifier for the user.
-   *
-   * @generated from field: string user_id = 1;
-   */
-  userId: string;
-
-  /**
-   * User's email address.
-   *
-   * @generated from field: string email = 2;
-   */
-  email: string;
-
-  /**
-   * Optional user name.
-   *
-   * @generated from field: optional string name = 3;
-   */
-  name?: string;
-
-  /**
-   * Indicates if the user has a verified email.
-   *
-   * @generated from field: bool email_verified = 4;
-   */
-  emailVerified: boolean;
-
-  /**
-   * Creation timestamp of the user account.
-   *
-   * @generated from field: int64 created_at = 5;
-   */
-  createdAt: bigint;
-
-  /**
-   * Last update timestamp of the user account.
-   *
-   * @generated from field: int64 updated_at = 6;
-   */
-  updatedAt: bigint;
-};
-
-/**
- * Describes the message auth.v1.UserInfo.
- * Use `create(UserInfoSchema)` to create a new message.
- */
-export const UserInfoSchema: GenMessage<UserInfo> = /*@__PURE__*/
   messageDesc(file_auth_v1_common, 1);
 
 /**
- * AuthResponse contains the complete authentication result.
+ * AuthResponse contains the authentication tokens.
  *
  * @generated from message auth.v1.AuthResponse
  */
@@ -117,16 +95,9 @@ export type AuthResponse = Message<"auth.v1.AuthResponse"> & {
   tokens?: AuthTokens;
 
   /**
-   * User information.
-   *
-   * @generated from field: auth.v1.UserInfo user = 2;
-   */
-  user?: UserInfo;
-
-  /**
    * Indicates if this was a new user registration.
    *
-   * @generated from field: bool is_new_user = 3;
+   * @generated from field: bool is_new_user = 2;
    */
   isNewUser: boolean;
 };
@@ -139,29 +110,24 @@ export const AuthResponseSchema: GenMessage<AuthResponse> = /*@__PURE__*/
   messageDesc(file_auth_v1_common, 2);
 
 /**
- * SuccessResponse is a simple response indicating operation success.
+ * Re-export common types for backward compatibility
  *
  * @generated from message auth.v1.SuccessResponse
+ * @deprecated
  */
 export type SuccessResponse = Message<"auth.v1.SuccessResponse"> & {
   /**
-   * Indicates whether the operation was successful.
+   * Use common.v1.SuccessResponse instead
    *
-   * @generated from field: bool success = 1;
+   * @generated from field: common.v1.SuccessResponse response = 1;
    */
-  success: boolean;
-
-  /**
-   * Optional message providing additional context.
-   *
-   * @generated from field: optional string message = 2;
-   */
-  message?: string;
+  response?: SuccessResponse$1;
 };
 
 /**
  * Describes the message auth.v1.SuccessResponse.
  * Use `create(SuccessResponseSchema)` to create a new message.
+ * @deprecated
  */
 export const SuccessResponseSchema: GenMessage<SuccessResponse> = /*@__PURE__*/
   messageDesc(file_auth_v1_common, 3);

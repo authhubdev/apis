@@ -2,30 +2,34 @@
 // @generated from file auth/v1/session.proto (package auth.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
-import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
-import type { AuthTokens, SuccessResponse, UserInfo } from "./common_pb";
+import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
+import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
+import type { AuthResponse } from "./common_pb";
 import { file_auth_v1_common } from "./common_pb";
+import type { SuccessResponse } from "../../common/v1/common_pb";
+import { file_common_v1_common } from "../../common/v1/common_pb";
+import type { Timestamp } from "@bufbuild/protobuf/wkt";
+import { file_google_protobuf_timestamp, file_google_protobuf_wrappers } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file auth/v1/session.proto.
  */
 export const file_auth_v1_session: GenFile = /*@__PURE__*/
-  fileDesc("ChVhdXRoL3YxL3Nlc3Npb24ucHJvdG8SB2F1dGgudjEiiAMKC1Nlc3Npb25JbmZvEhIKCnNlc3Npb25faWQYASABKAkSDwoHdXNlcl9pZBgCIAEoCRISCgppcF9hZGRyZXNzGAMgASgJEhIKCnVzZXJfYWdlbnQYBCABKAkSKAoLZGV2aWNlX3R5cGUYBSABKA4yEy5hdXRoLnYxLkRldmljZVR5cGUSMgoQb3BlcmF0aW5nX3N5c3RlbRgGIAEoDjIYLmF1dGgudjEuT3BlcmF0aW5nU3lzdGVtEg8KB2Jyb3dzZXIYByABKAkSFwoPYnJvd3Nlcl92ZXJzaW9uGAggASgJEhkKDGRldmljZV9tb2RlbBgJIAEoCUgAiAEBEhUKCGxvY2F0aW9uGAogASgJSAGIAQESEgoKY3JlYXRlZF9hdBgLIAEoAxIYChBsYXN0X2FjdGl2aXR5X2F0GAwgASgDEhIKCmV4cGlyZXNfYXQYDSABKAMSEgoKaXNfY3VycmVudBgOIAEoCEIPCg1fZGV2aWNlX21vZGVsQgsKCV9sb2NhdGlvbiIiChFHZXRTZXNzaW9uUmVxdWVzdBINCgV0b2tlbhgBIAEoCSJcChJHZXRTZXNzaW9uUmVzcG9uc2USJQoHc2Vzc2lvbhgBIAEoCzIULmF1dGgudjEuU2Vzc2lvbkluZm8SHwoEdXNlchgCIAEoCzIRLmF1dGgudjEuVXNlckluZm8iLgoVUmVmcmVzaFNlc3Npb25SZXF1ZXN0EhUKDXJlZnJlc2hfdG9rZW4YASABKAkiPQoWUmVmcmVzaFNlc3Npb25SZXNwb25zZRIjCgZ0b2tlbnMYASABKAsyEy5hdXRoLnYxLkF1dGhUb2tlbnMiXAoUUmV2b2tlU2Vzc2lvblJlcXVlc3QSFwoKc2Vzc2lvbl9pZBgBIAEoCUgAiAEBEhIKBXRva2VuGAIgASgJSAGIAQFCDQoLX3Nlc3Npb25faWRCCAoGX3Rva2VuIkEKFVJldm9rZVNlc3Npb25SZXNwb25zZRIoCgZyZXN1bHQYASABKAsyGC5hdXRoLnYxLlN1Y2Nlc3NSZXNwb25zZSJVChNMaXN0U2Vzc2lvbnNSZXF1ZXN0EhQKB3VzZXJfaWQYASABKAlIAIgBARISCgV0b2tlbhgCIAEoCUgBiAEBQgoKCF91c2VyX2lkQggKBl90b2tlbiJNChRMaXN0U2Vzc2lvbnNSZXNwb25zZRImCghzZXNzaW9ucxgBIAMoCzIULmF1dGgudjEuU2Vzc2lvbkluZm8SDQoFdG90YWwYAiABKAUihgEKGFJldm9rZUFsbFNlc3Npb25zUmVxdWVzdBIUCgd1c2VyX2lkGAEgASgJSACIAQESEgoFdG9rZW4YAiABKAlIAYgBARIZCgxrZWVwX2N1cnJlbnQYAyABKAhIAogBAUIKCghfdXNlcl9pZEIICgZfdG9rZW5CDwoNX2tlZXBfY3VycmVudCJcChlSZXZva2VBbGxTZXNzaW9uc1Jlc3BvbnNlEigKBnJlc3VsdBgBIAEoCzIYLmF1dGgudjEuU3VjY2Vzc1Jlc3BvbnNlEhUKDXJldm9rZWRfY291bnQYAiABKAUqiQEKCkRldmljZVR5cGUSGwoXREVWSUNFX1RZUEVfVU5TUEVDSUZJRUQQABIXChNERVZJQ0VfVFlQRV9ERVNLVE9QEAESFgoSREVWSUNFX1RZUEVfTU9CSUxFEAISFgoSREVWSUNFX1RZUEVfVEFCTEVUEAMSFQoRREVWSUNFX1RZUEVfT1RIRVIQBCr8AQoPT3BlcmF0aW5nU3lzdGVtEiAKHE9QRVJBVElOR19TWVNURU1fVU5TUEVDSUZJRUQQABIaChZPUEVSQVRJTkdfU1lTVEVNX01BQ09TEAESHAoYT1BFUkFUSU5HX1NZU1RFTV9XSU5ET1dTEAISGAoUT1BFUkFUSU5HX1NZU1RFTV9JT1MQAxIcChhPUEVSQVRJTkdfU1lTVEVNX0FORFJPSUQQBBIaChZPUEVSQVRJTkdfU1lTVEVNX0xJTlVYEAUSHQoZT1BFUkFUSU5HX1NZU1RFTV9DSFJPTUVPUxAGEhoKFk9QRVJBVElOR19TWVNURU1fT1RIRVIQBzKnAwoSQXV0aFNlc3Npb25TZXJ2aWNlEkUKCkdldFNlc3Npb24SGi5hdXRoLnYxLkdldFNlc3Npb25SZXF1ZXN0GhsuYXV0aC52MS5HZXRTZXNzaW9uUmVzcG9uc2USUQoOUmVmcmVzaFNlc3Npb24SHi5hdXRoLnYxLlJlZnJlc2hTZXNzaW9uUmVxdWVzdBofLmF1dGgudjEuUmVmcmVzaFNlc3Npb25SZXNwb25zZRJOCg1SZXZva2VTZXNzaW9uEh0uYXV0aC52MS5SZXZva2VTZXNzaW9uUmVxdWVzdBoeLmF1dGgudjEuUmV2b2tlU2Vzc2lvblJlc3BvbnNlEksKDExpc3RTZXNzaW9ucxIcLmF1dGgudjEuTGlzdFNlc3Npb25zUmVxdWVzdBodLmF1dGgudjEuTGlzdFNlc3Npb25zUmVzcG9uc2USWgoRUmV2b2tlQWxsU2Vzc2lvbnMSIS5hdXRoLnYxLlJldm9rZUFsbFNlc3Npb25zUmVxdWVzdBoiLmF1dGgudjEuUmV2b2tlQWxsU2Vzc2lvbnNSZXNwb25zZUIyWjBnaXRodWIuY29tL2F1dGhodWJkZXYvYXBpcy9nZW4vZ28vYXV0aC92MTthdXRodjFiBnByb3RvMw", [file_auth_v1_common]);
+  fileDesc("ChVhdXRoL3YxL3Nlc3Npb24ucHJvdG8SB2F1dGgudjEi/wEKB1Nlc3Npb24SCgoCaWQYASABKAkSDwoHdXNlcl9pZBgCIAEoCRIKCgJpcBgDIAEoCRISCgp1c2VyX2FnZW50GAQgASgJEhAKCGxvY2F0aW9uGAUgASgJEg8KB2N1cnJlbnQYBiABKAgSLgoKY3JlYXRlZF9hdBgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKZXhwaXJlc19hdBgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASNAoQbGFzdF9hY2Nlc3NlZF9hdBgJIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiEwoRR2V0U2Vzc2lvblJlcXVlc3QiNwoSR2V0U2Vzc2lvblJlc3BvbnNlEiEKB3Nlc3Npb24YASABKAsyEC5hdXRoLnYxLlNlc3Npb24iFQoTTGlzdFNlc3Npb25zUmVxdWVzdCJJChRMaXN0U2Vzc2lvbnNSZXNwb25zZRIiCghzZXNzaW9ucxgBIAMoCzIQLmF1dGgudjEuU2Vzc2lvbhINCgV0b3RhbBgCIAEoDSJIChRSZXZva2VTZXNzaW9uUmVxdWVzdBIwCgpzZXNzaW9uX2lkGAEgASgLMhwuZ29vZ2xlLnByb3RvYnVmLlN0cmluZ1ZhbHVlIkMKFVJldm9rZVNlc3Npb25SZXNwb25zZRIqCgZyZXN1bHQYASABKAsyGi5jb21tb24udjEuU3VjY2Vzc1Jlc3BvbnNlIkwKGFJldm9rZUFsbFNlc3Npb25zUmVxdWVzdBIwCgxrZWVwX2N1cnJlbnQYASABKAsyGi5nb29nbGUucHJvdG9idWYuQm9vbFZhbHVlIkcKGVJldm9rZUFsbFNlc3Npb25zUmVzcG9uc2USKgoGcmVzdWx0GAEgASgLMhouY29tbW9uLnYxLlN1Y2Nlc3NSZXNwb25zZSIcChpSZXZva2VPdGhlclNlc3Npb25zUmVxdWVzdCJJChtSZXZva2VPdGhlclNlc3Npb25zUmVzcG9uc2USKgoGcmVzdWx0GAEgASgLMhouY29tbW9uLnYxLlN1Y2Nlc3NSZXNwb25zZSIsChNSZWZyZXNoVG9rZW5SZXF1ZXN0EhUKDXJlZnJlc2hfdG9rZW4YASABKAkiOwoUUmVmcmVzaFRva2VuUmVzcG9uc2USIwoEYXV0aBgBIAEoCzIVLmF1dGgudjEuQXV0aFJlc3BvbnNlMosECg5TZXNzaW9uU2VydmljZRJHCgpHZXRTZXNzaW9uEhouYXV0aC52MS5HZXRTZXNzaW9uUmVxdWVzdBobLmF1dGgudjEuR2V0U2Vzc2lvblJlc3BvbnNlIgASTQoMTGlzdFNlc3Npb25zEhwuYXV0aC52MS5MaXN0U2Vzc2lvbnNSZXF1ZXN0Gh0uYXV0aC52MS5MaXN0U2Vzc2lvbnNSZXNwb25zZSIAElAKDVJldm9rZVNlc3Npb24SHS5hdXRoLnYxLlJldm9rZVNlc3Npb25SZXF1ZXN0Gh4uYXV0aC52MS5SZXZva2VTZXNzaW9uUmVzcG9uc2UiABJcChFSZXZva2VBbGxTZXNzaW9ucxIhLmF1dGgudjEuUmV2b2tlQWxsU2Vzc2lvbnNSZXF1ZXN0GiIuYXV0aC52MS5SZXZva2VBbGxTZXNzaW9uc1Jlc3BvbnNlIgASYgoTUmV2b2tlT3RoZXJTZXNzaW9ucxIjLmF1dGgudjEuUmV2b2tlT3RoZXJTZXNzaW9uc1JlcXVlc3QaJC5hdXRoLnYxLlJldm9rZU90aGVyU2Vzc2lvbnNSZXNwb25zZSIAEk0KDFJlZnJlc2hUb2tlbhIcLmF1dGgudjEuUmVmcmVzaFRva2VuUmVxdWVzdBodLmF1dGgudjEuUmVmcmVzaFRva2VuUmVzcG9uc2UiAEIyWjBnaXRodWIuY29tL2F1dGhodWJkZXYvYXBpcy9nZW4vZ28vYXV0aC92MTthdXRodjFiBnByb3RvMw", [file_auth_v1_common, file_common_v1_common, file_google_protobuf_timestamp, file_google_protobuf_wrappers]);
 
 /**
- * SessionInfo contains information about an authentication session.
+ * Session contains information about a user's authentication session.
  *
- * @generated from message auth.v1.SessionInfo
+ * @generated from message auth.v1.Session
  */
-export type SessionInfo = Message<"auth.v1.SessionInfo"> & {
+export type Session = Message<"auth.v1.Session"> & {
   /**
    * Unique identifier for the session.
    *
-   * @generated from field: string session_id = 1;
+   * @generated from field: string id = 1;
    */
-  sessionId: string;
+  id: string;
 
   /**
    * User ID associated with the session.
@@ -37,109 +41,66 @@ export type SessionInfo = Message<"auth.v1.SessionInfo"> & {
   /**
    * IP address from which the session was created.
    *
-   * @generated from field: string ip_address = 3;
+   * @generated from field: string ip = 3;
    */
-  ipAddress: string;
+  ip: string;
 
   /**
-   * User agent information (browser, device, etc.).
+   * User agent (browser/device) information.
    *
    * @generated from field: string user_agent = 4;
    */
   userAgent: string;
 
   /**
-   * Device type (e.g., "Desktop", "Mobile", "Tablet").
+   * Location information derived from the IP.
    *
-   * @generated from field: auth.v1.DeviceType device_type = 5;
+   * @generated from field: string location = 5;
    */
-  deviceType: DeviceType;
+  location: string;
 
   /**
-   * Operating system (e.g., "macOS", "Windows", "iOS", "Android").
+   * Whether this is the current active session.
    *
-   * @generated from field: auth.v1.OperatingSystem operating_system = 6;
+   * @generated from field: bool current = 6;
    */
-  operatingSystem: OperatingSystem;
+  current: boolean;
 
   /**
-   * Browser name (e.g., "Chrome", "Firefox", "Safari").
+   * Creation timestamp.
    *
-   * @generated from field: string browser = 7;
+   * @generated from field: google.protobuf.Timestamp created_at = 7;
    */
-  browser: string;
+  createdAt?: Timestamp;
 
   /**
-   * Browser version (e.g., "115.0.5790").
+   * Expiration timestamp.
    *
-   * @generated from field: string browser_version = 8;
+   * @generated from field: google.protobuf.Timestamp expires_at = 8;
    */
-  browserVersion: string;
+  expiresAt?: Timestamp;
 
   /**
-   * Device model when available (e.g., "iPhone 14", "Pixel 7").
+   * Last access timestamp.
    *
-   * @generated from field: optional string device_model = 9;
+   * @generated from field: google.protobuf.Timestamp last_accessed_at = 9;
    */
-  deviceModel?: string;
-
-  /**
-   * Location information based on IP address (e.g., "San Francisco, US").
-   *
-   * @generated from field: optional string location = 10;
-   */
-  location?: string;
-
-  /**
-   * Creation timestamp of the session.
-   *
-   * @generated from field: int64 created_at = 11;
-   */
-  createdAt: bigint;
-
-  /**
-   * Last activity timestamp for the session.
-   *
-   * @generated from field: int64 last_activity_at = 12;
-   */
-  lastActivityAt: bigint;
-
-  /**
-   * Expiration timestamp of the session.
-   *
-   * @generated from field: int64 expires_at = 13;
-   */
-  expiresAt: bigint;
-
-  /**
-   * Indicates whether this is the current active session.
-   * This is useful when listing multiple sessions to identify the current one.
-   *
-   * @generated from field: bool is_current = 14;
-   */
-  isCurrent: boolean;
+  lastAccessedAt?: Timestamp;
 };
 
 /**
- * Describes the message auth.v1.SessionInfo.
- * Use `create(SessionInfoSchema)` to create a new message.
+ * Describes the message auth.v1.Session.
+ * Use `create(SessionSchema)` to create a new message.
  */
-export const SessionInfoSchema: GenMessage<SessionInfo> = /*@__PURE__*/
+export const SessionSchema: GenMessage<Session> = /*@__PURE__*/
   messageDesc(file_auth_v1_session, 0);
 
 /**
- * GetSessionRequest contains the token to retrieve session information.
+ * GetSessionRequest is used to retrieve the current session information.
  *
  * @generated from message auth.v1.GetSessionRequest
  */
 export type GetSessionRequest = Message<"auth.v1.GetSessionRequest"> & {
-  /**
-   * Authentication token for the session.
-   * Must not be empty.
-   *
-   * @generated from field: string token = 1;
-   */
-  token: string;
 };
 
 /**
@@ -150,24 +111,17 @@ export const GetSessionRequestSchema: GenMessage<GetSessionRequest> = /*@__PURE_
   messageDesc(file_auth_v1_session, 1);
 
 /**
- * GetSessionResponse contains information about the session.
+ * GetSessionResponse contains the current session details.
  *
  * @generated from message auth.v1.GetSessionResponse
  */
 export type GetSessionResponse = Message<"auth.v1.GetSessionResponse"> & {
   /**
-   * Session information.
+   * Current session information.
    *
-   * @generated from field: auth.v1.SessionInfo session = 1;
+   * @generated from field: auth.v1.Session session = 1;
    */
-  session?: SessionInfo;
-
-  /**
-   * User information associated with the session.
-   *
-   * @generated from field: auth.v1.UserInfo user = 2;
-   */
-  user?: UserInfo;
+  session?: Session;
 };
 
 /**
@@ -178,69 +132,60 @@ export const GetSessionResponseSchema: GenMessage<GetSessionResponse> = /*@__PUR
   messageDesc(file_auth_v1_session, 2);
 
 /**
- * RefreshSessionRequest contains the refresh token to get new auth tokens.
+ * ListSessionsRequest is used to retrieve all active sessions.
  *
- * @generated from message auth.v1.RefreshSessionRequest
+ * @generated from message auth.v1.ListSessionsRequest
  */
-export type RefreshSessionRequest = Message<"auth.v1.RefreshSessionRequest"> & {
-  /**
-   * Refresh token received during previous authentication.
-   * Must not be empty.
-   *
-   * @generated from field: string refresh_token = 1;
-   */
-  refreshToken: string;
+export type ListSessionsRequest = Message<"auth.v1.ListSessionsRequest"> & {
 };
 
 /**
- * Describes the message auth.v1.RefreshSessionRequest.
- * Use `create(RefreshSessionRequestSchema)` to create a new message.
+ * Describes the message auth.v1.ListSessionsRequest.
+ * Use `create(ListSessionsRequestSchema)` to create a new message.
  */
-export const RefreshSessionRequestSchema: GenMessage<RefreshSessionRequest> = /*@__PURE__*/
+export const ListSessionsRequestSchema: GenMessage<ListSessionsRequest> = /*@__PURE__*/
   messageDesc(file_auth_v1_session, 3);
 
 /**
- * RefreshSessionResponse contains new authentication tokens.
+ * ListSessionsResponse contains a list of all active sessions.
  *
- * @generated from message auth.v1.RefreshSessionResponse
+ * @generated from message auth.v1.ListSessionsResponse
  */
-export type RefreshSessionResponse = Message<"auth.v1.RefreshSessionResponse"> & {
+export type ListSessionsResponse = Message<"auth.v1.ListSessionsResponse"> & {
   /**
-   * New authentication tokens.
+   * List of active sessions.
    *
-   * @generated from field: auth.v1.AuthTokens tokens = 1;
+   * @generated from field: repeated auth.v1.Session sessions = 1;
    */
-  tokens?: AuthTokens;
+  sessions: Session[];
+
+  /**
+   * Total count of active sessions.
+   *
+   * @generated from field: uint32 total = 2;
+   */
+  total: number;
 };
 
 /**
- * Describes the message auth.v1.RefreshSessionResponse.
- * Use `create(RefreshSessionResponseSchema)` to create a new message.
+ * Describes the message auth.v1.ListSessionsResponse.
+ * Use `create(ListSessionsResponseSchema)` to create a new message.
  */
-export const RefreshSessionResponseSchema: GenMessage<RefreshSessionResponse> = /*@__PURE__*/
+export const ListSessionsResponseSchema: GenMessage<ListSessionsResponse> = /*@__PURE__*/
   messageDesc(file_auth_v1_session, 4);
 
 /**
- * RevokeSessionRequest contains information for revoking a session.
+ * RevokeSessionRequest is used to terminate a specific session.
  *
  * @generated from message auth.v1.RevokeSessionRequest
  */
 export type RevokeSessionRequest = Message<"auth.v1.RevokeSessionRequest"> & {
   /**
-   * Session ID to revoke.
-   * Either session_id or token must be provided.
+   * ID of the session to revoke.
    *
-   * @generated from field: optional string session_id = 1;
+   * @generated from field: google.protobuf.StringValue session_id = 1;
    */
   sessionId?: string;
-
-  /**
-   * Authentication token for the session to revoke.
-   * Either session_id or token must be provided.
-   *
-   * @generated from field: optional string token = 2;
-   */
-  token?: string;
 };
 
 /**
@@ -251,15 +196,15 @@ export const RevokeSessionRequestSchema: GenMessage<RevokeSessionRequest> = /*@_
   messageDesc(file_auth_v1_session, 5);
 
 /**
- * RevokeSessionResponse indicates the result of the session revocation.
+ * RevokeSessionResponse confirms the session termination.
  *
  * @generated from message auth.v1.RevokeSessionResponse
  */
 export type RevokeSessionResponse = Message<"auth.v1.RevokeSessionResponse"> & {
   /**
-   * Indicates whether the session was successfully revoked.
+   * Operation result.
    *
-   * @generated from field: auth.v1.SuccessResponse result = 1;
+   * @generated from field: common.v1.SuccessResponse result = 1;
    */
   result?: SuccessResponse;
 };
@@ -272,90 +217,15 @@ export const RevokeSessionResponseSchema: GenMessage<RevokeSessionResponse> = /*
   messageDesc(file_auth_v1_session, 6);
 
 /**
- * ListSessionsRequest requests all active sessions for a user.
- *
- * @generated from message auth.v1.ListSessionsRequest
- */
-export type ListSessionsRequest = Message<"auth.v1.ListSessionsRequest"> & {
-  /**
-   * User ID for which to list sessions.
-   * If not provided, the user associated with the token will be used.
-   *
-   * @generated from field: optional string user_id = 1;
-   */
-  userId?: string;
-
-  /**
-   * Authentication token.
-   * If user_id is not provided, this must be provided.
-   *
-   * @generated from field: optional string token = 2;
-   */
-  token?: string;
-};
-
-/**
- * Describes the message auth.v1.ListSessionsRequest.
- * Use `create(ListSessionsRequestSchema)` to create a new message.
- */
-export const ListSessionsRequestSchema: GenMessage<ListSessionsRequest> = /*@__PURE__*/
-  messageDesc(file_auth_v1_session, 7);
-
-/**
- * ListSessionsResponse contains a list of active sessions.
- *
- * @generated from message auth.v1.ListSessionsResponse
- */
-export type ListSessionsResponse = Message<"auth.v1.ListSessionsResponse"> & {
-  /**
-   * List of active sessions.
-   *
-   * @generated from field: repeated auth.v1.SessionInfo sessions = 1;
-   */
-  sessions: SessionInfo[];
-
-  /**
-   * Total number of active sessions.
-   *
-   * @generated from field: int32 total = 2;
-   */
-  total: number;
-};
-
-/**
- * Describes the message auth.v1.ListSessionsResponse.
- * Use `create(ListSessionsResponseSchema)` to create a new message.
- */
-export const ListSessionsResponseSchema: GenMessage<ListSessionsResponse> = /*@__PURE__*/
-  messageDesc(file_auth_v1_session, 8);
-
-/**
- * RevokeAllSessionsRequest contains information for revoking all user sessions.
+ * RevokeAllSessionsRequest is used to terminate all sessions.
  *
  * @generated from message auth.v1.RevokeAllSessionsRequest
  */
 export type RevokeAllSessionsRequest = Message<"auth.v1.RevokeAllSessionsRequest"> & {
   /**
-   * User ID for which to revoke all sessions.
-   * If not provided, the user associated with the token will be used.
+   * Whether to keep the current session active.
    *
-   * @generated from field: optional string user_id = 1;
-   */
-  userId?: string;
-
-  /**
-   * Authentication token.
-   * If user_id is not provided, this must be provided.
-   * This session will also be revoked unless keep_current is true.
-   *
-   * @generated from field: optional string token = 2;
-   */
-  token?: string;
-
-  /**
-   * If true, the current session (identified by token) will not be revoked.
-   *
-   * @generated from field: optional bool keep_current = 3;
+   * @generated from field: google.protobuf.BoolValue keep_current = 1;
    */
   keepCurrent?: boolean;
 };
@@ -365,27 +235,20 @@ export type RevokeAllSessionsRequest = Message<"auth.v1.RevokeAllSessionsRequest
  * Use `create(RevokeAllSessionsRequestSchema)` to create a new message.
  */
 export const RevokeAllSessionsRequestSchema: GenMessage<RevokeAllSessionsRequest> = /*@__PURE__*/
-  messageDesc(file_auth_v1_session, 9);
+  messageDesc(file_auth_v1_session, 7);
 
 /**
- * RevokeAllSessionsResponse indicates the result of revoking all sessions.
+ * RevokeAllSessionsResponse confirms all sessions were terminated.
  *
  * @generated from message auth.v1.RevokeAllSessionsResponse
  */
 export type RevokeAllSessionsResponse = Message<"auth.v1.RevokeAllSessionsResponse"> & {
   /**
-   * Indicates whether all sessions were successfully revoked.
+   * Operation result.
    *
-   * @generated from field: auth.v1.SuccessResponse result = 1;
+   * @generated from field: common.v1.SuccessResponse result = 1;
    */
   result?: SuccessResponse;
-
-  /**
-   * Number of sessions revoked.
-   *
-   * @generated from field: int32 revoked_count = 2;
-   */
-  revokedCount: number;
 };
 
 /**
@@ -393,136 +256,96 @@ export type RevokeAllSessionsResponse = Message<"auth.v1.RevokeAllSessionsRespon
  * Use `create(RevokeAllSessionsResponseSchema)` to create a new message.
  */
 export const RevokeAllSessionsResponseSchema: GenMessage<RevokeAllSessionsResponse> = /*@__PURE__*/
+  messageDesc(file_auth_v1_session, 8);
+
+/**
+ * RevokeOtherSessionsRequest is used to terminate all sessions except the current one.
+ *
+ * @generated from message auth.v1.RevokeOtherSessionsRequest
+ */
+export type RevokeOtherSessionsRequest = Message<"auth.v1.RevokeOtherSessionsRequest"> & {
+};
+
+/**
+ * Describes the message auth.v1.RevokeOtherSessionsRequest.
+ * Use `create(RevokeOtherSessionsRequestSchema)` to create a new message.
+ */
+export const RevokeOtherSessionsRequestSchema: GenMessage<RevokeOtherSessionsRequest> = /*@__PURE__*/
+  messageDesc(file_auth_v1_session, 9);
+
+/**
+ * RevokeOtherSessionsResponse confirms other sessions were terminated.
+ *
+ * @generated from message auth.v1.RevokeOtherSessionsResponse
+ */
+export type RevokeOtherSessionsResponse = Message<"auth.v1.RevokeOtherSessionsResponse"> & {
+  /**
+   * Operation result.
+   *
+   * @generated from field: common.v1.SuccessResponse result = 1;
+   */
+  result?: SuccessResponse;
+};
+
+/**
+ * Describes the message auth.v1.RevokeOtherSessionsResponse.
+ * Use `create(RevokeOtherSessionsResponseSchema)` to create a new message.
+ */
+export const RevokeOtherSessionsResponseSchema: GenMessage<RevokeOtherSessionsResponse> = /*@__PURE__*/
   messageDesc(file_auth_v1_session, 10);
 
 /**
- * DeviceType represents the type of device used for authentication.
+ * RefreshTokenRequest is used to refresh an expired authentication token.
  *
- * @generated from enum auth.v1.DeviceType
+ * @generated from message auth.v1.RefreshTokenRequest
  */
-export enum DeviceType {
+export type RefreshTokenRequest = Message<"auth.v1.RefreshTokenRequest"> & {
   /**
-   * Default value for proto3
+   * Refresh token obtained during login or previous refresh.
    *
-   * @generated from enum value: DEVICE_TYPE_UNSPECIFIED = 0;
+   * @generated from field: string refresh_token = 1;
    */
-  UNSPECIFIED = 0,
-
-  /**
-   * Desktop computer
-   *
-   * @generated from enum value: DEVICE_TYPE_DESKTOP = 1;
-   */
-  DESKTOP = 1,
-
-  /**
-   * Mobile phone
-   *
-   * @generated from enum value: DEVICE_TYPE_MOBILE = 2;
-   */
-  MOBILE = 2,
-
-  /**
-   * Tablet device
-   *
-   * @generated from enum value: DEVICE_TYPE_TABLET = 3;
-   */
-  TABLET = 3,
-
-  /**
-   * Other/unknown device type
-   *
-   * @generated from enum value: DEVICE_TYPE_OTHER = 4;
-   */
-  OTHER = 4,
-}
+  refreshToken: string;
+};
 
 /**
- * Describes the enum auth.v1.DeviceType.
+ * Describes the message auth.v1.RefreshTokenRequest.
+ * Use `create(RefreshTokenRequestSchema)` to create a new message.
  */
-export const DeviceTypeSchema: GenEnum<DeviceType> = /*@__PURE__*/
-  enumDesc(file_auth_v1_session, 0);
+export const RefreshTokenRequestSchema: GenMessage<RefreshTokenRequest> = /*@__PURE__*/
+  messageDesc(file_auth_v1_session, 11);
 
 /**
- * OperatingSystem represents the operating system of the device.
+ * RefreshTokenResponse contains the new authentication tokens.
  *
- * @generated from enum auth.v1.OperatingSystem
+ * @generated from message auth.v1.RefreshTokenResponse
  */
-export enum OperatingSystem {
+export type RefreshTokenResponse = Message<"auth.v1.RefreshTokenResponse"> & {
   /**
-   * Default value for proto3
+   * New authentication tokens.
    *
-   * @generated from enum value: OPERATING_SYSTEM_UNSPECIFIED = 0;
+   * @generated from field: auth.v1.AuthResponse auth = 1;
    */
-  UNSPECIFIED = 0,
-
-  /**
-   * macOS operating system
-   *
-   * @generated from enum value: OPERATING_SYSTEM_MACOS = 1;
-   */
-  MACOS = 1,
-
-  /**
-   * Windows operating system
-   *
-   * @generated from enum value: OPERATING_SYSTEM_WINDOWS = 2;
-   */
-  WINDOWS = 2,
-
-  /**
-   * iOS mobile operating system
-   *
-   * @generated from enum value: OPERATING_SYSTEM_IOS = 3;
-   */
-  IOS = 3,
-
-  /**
-   * Android mobile operating system
-   *
-   * @generated from enum value: OPERATING_SYSTEM_ANDROID = 4;
-   */
-  ANDROID = 4,
-
-  /**
-   * Linux operating system
-   *
-   * @generated from enum value: OPERATING_SYSTEM_LINUX = 5;
-   */
-  LINUX = 5,
-
-  /**
-   * ChromeOS operating system
-   *
-   * @generated from enum value: OPERATING_SYSTEM_CHROMEOS = 6;
-   */
-  CHROMEOS = 6,
-
-  /**
-   * Other/unknown operating system
-   *
-   * @generated from enum value: OPERATING_SYSTEM_OTHER = 7;
-   */
-  OTHER = 7,
-}
+  auth?: AuthResponse;
+};
 
 /**
- * Describes the enum auth.v1.OperatingSystem.
+ * Describes the message auth.v1.RefreshTokenResponse.
+ * Use `create(RefreshTokenResponseSchema)` to create a new message.
  */
-export const OperatingSystemSchema: GenEnum<OperatingSystem> = /*@__PURE__*/
-  enumDesc(file_auth_v1_session, 1);
+export const RefreshTokenResponseSchema: GenMessage<RefreshTokenResponse> = /*@__PURE__*/
+  messageDesc(file_auth_v1_session, 12);
 
 /**
- * AuthSessionService provides session management operations.
+ * SessionService provides management of user sessions.
  *
- * @generated from service auth.v1.AuthSessionService
+ * @generated from service auth.v1.SessionService
  */
-export const AuthSessionService: GenService<{
+export const SessionService: GenService<{
   /**
-   * GetSession retrieves information about the current authenticated session.
-   * It validates the provided token and returns session details.
+   * GetSession retrieves details about the current session.
    *
-   * @generated from rpc auth.v1.AuthSessionService.GetSession
+   * @generated from rpc auth.v1.SessionService.GetSession
    */
   getSession: {
     methodKind: "unary";
@@ -530,32 +353,9 @@ export const AuthSessionService: GenService<{
     output: typeof GetSessionResponseSchema;
   },
   /**
-   * RefreshSession generates new authentication tokens using a refresh token.
-   * It validates the refresh token and issues a new access token.
+   * ListSessions retrieves all active sessions for the current user.
    *
-   * @generated from rpc auth.v1.AuthSessionService.RefreshSession
-   */
-  refreshSession: {
-    methodKind: "unary";
-    input: typeof RefreshSessionRequestSchema;
-    output: typeof RefreshSessionResponseSchema;
-  },
-  /**
-   * RevokeSession invalidates a specific session.
-   * This can be used when a user logs out from a specific device.
-   *
-   * @generated from rpc auth.v1.AuthSessionService.RevokeSession
-   */
-  revokeSession: {
-    methodKind: "unary";
-    input: typeof RevokeSessionRequestSchema;
-    output: typeof RevokeSessionResponseSchema;
-  },
-  /**
-   * ListSessions returns all active sessions for a user.
-   * This can be used to show users all devices where they're currently logged in.
-   *
-   * @generated from rpc auth.v1.AuthSessionService.ListSessions
+   * @generated from rpc auth.v1.SessionService.ListSessions
    */
   listSessions: {
     methodKind: "unary";
@@ -563,15 +363,44 @@ export const AuthSessionService: GenService<{
     output: typeof ListSessionsResponseSchema;
   },
   /**
-   * RevokeAllSessions invalidates all sessions for a user.
-   * This can be used for security purposes or when a user wants to log out from all devices.
+   * RevokeSession terminates a specific session by its ID.
    *
-   * @generated from rpc auth.v1.AuthSessionService.RevokeAllSessions
+   * @generated from rpc auth.v1.SessionService.RevokeSession
+   */
+  revokeSession: {
+    methodKind: "unary";
+    input: typeof RevokeSessionRequestSchema;
+    output: typeof RevokeSessionResponseSchema;
+  },
+  /**
+   * RevokeAllSessions terminates all sessions for the current user.
+   *
+   * @generated from rpc auth.v1.SessionService.RevokeAllSessions
    */
   revokeAllSessions: {
     methodKind: "unary";
     input: typeof RevokeAllSessionsRequestSchema;
     output: typeof RevokeAllSessionsResponseSchema;
+  },
+  /**
+   * RevokeOtherSessions terminates all sessions except the current one.
+   *
+   * @generated from rpc auth.v1.SessionService.RevokeOtherSessions
+   */
+  revokeOtherSessions: {
+    methodKind: "unary";
+    input: typeof RevokeOtherSessionsRequestSchema;
+    output: typeof RevokeOtherSessionsResponseSchema;
+  },
+  /**
+   * RefreshToken refreshes an expired token using a refresh token.
+   *
+   * @generated from rpc auth.v1.SessionService.RefreshToken
+   */
+  refreshToken: {
+    methodKind: "unary";
+    input: typeof RefreshTokenRequestSchema;
+    output: typeof RefreshTokenResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_auth_v1_session, 0);

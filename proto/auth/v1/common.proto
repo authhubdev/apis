@@ -2,58 +2,49 @@ syntax = "proto3";
 
 package auth.v1;
 
+import "common/v1/common.proto";
+import "google/protobuf/timestamp.proto";
+
 option go_package = "github.com/authhubdev/apis/gen/go/auth/v1;authv1";
+
+// OTPVerification is a standard message for OTP verification requests.
+message OTPVerification {
+  // One-Time Password (OTP) received via email or SMS.
+  // Must not be empty.
+  string otp = 1;
+  
+  // Verification ID associated with the OTP.
+  // Must not be empty.
+  string verification_id = 2;
+}
 
 // AuthTokens contains standard authentication tokens returned by auth operations.
 message AuthTokens {
   // Authentication token to be used for authorized requests.
   string token = 1;
   
-  // Token expiration time in Unix timestamp format.
-  int64 expires_at = 2;
+  // Token expiration time.
+  google.protobuf.Timestamp expires_at = 2;
   
   // Refresh token for obtaining a new access token when the current one expires.
   string refresh_token = 3;
 }
 
-// UserInfo contains basic user information returned by auth operations.
-message UserInfo {
-  // Unique identifier for the user.
-  string user_id = 1;
-  
-  // User's email address.
-  string email = 2;
-  
-  // Optional user name.
-  optional string name = 3;
-  
-  // Indicates if the user has a verified email.
-  bool email_verified = 4;
-  
-  // Creation timestamp of the user account.
-  int64 created_at = 5;
-  
-  // Last update timestamp of the user account.
-  int64 updated_at = 6;
-}
-
-// AuthResponse contains the complete authentication result.
+// AuthResponse contains the authentication tokens.
 message AuthResponse {
   // Authentication tokens for the user.
   AuthTokens tokens = 1;
   
-  // User information.
-  UserInfo user = 2;
-  
   // Indicates if this was a new user registration.
-  bool is_new_user = 3;
+  bool is_new_user = 2;
 }
 
-// SuccessResponse is a simple response indicating operation success.
+// These messages are deprecated legacy versions kept for backward compatibility only.
+
+// Re-export common types for backward compatibility
 message SuccessResponse {
-  // Indicates whether the operation was successful.
-  bool success = 1;
+  option deprecated = true;
   
-  // Optional message providing additional context.
-  optional string message = 2;
+  // Use common.v1.SuccessResponse instead
+  common.v1.SuccessResponse response = 1;
 }

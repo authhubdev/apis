@@ -21,8 +21,8 @@ import (
 const _ = connect.IsAtLeastVersion1_13_0
 
 const (
-	// AuthMagicLinkServiceName is the fully-qualified name of the AuthMagicLinkService service.
-	AuthMagicLinkServiceName = "auth.v1.AuthMagicLinkService"
+	// MagicLinkServiceName is the fully-qualified name of the MagicLinkService service.
+	MagicLinkServiceName = "auth.v1.MagicLinkService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -33,118 +33,112 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// AuthMagicLinkServiceSendMagicLinkProcedure is the fully-qualified name of the
-	// AuthMagicLinkService's SendMagicLink RPC.
-	AuthMagicLinkServiceSendMagicLinkProcedure = "/auth.v1.AuthMagicLinkService/SendMagicLink"
-	// AuthMagicLinkServiceVerifyMagicLinkProcedure is the fully-qualified name of the
-	// AuthMagicLinkService's VerifyMagicLink RPC.
-	AuthMagicLinkServiceVerifyMagicLinkProcedure = "/auth.v1.AuthMagicLinkService/VerifyMagicLink"
+	// MagicLinkServiceSendMagicLinkProcedure is the fully-qualified name of the MagicLinkService's
+	// SendMagicLink RPC.
+	MagicLinkServiceSendMagicLinkProcedure = "/auth.v1.MagicLinkService/SendMagicLink"
+	// MagicLinkServiceVerifyMagicLinkProcedure is the fully-qualified name of the MagicLinkService's
+	// VerifyMagicLink RPC.
+	MagicLinkServiceVerifyMagicLinkProcedure = "/auth.v1.MagicLinkService/VerifyMagicLink"
 )
 
-// AuthMagicLinkServiceClient is a client for the auth.v1.AuthMagicLinkService service.
-type AuthMagicLinkServiceClient interface {
-	// SendMagicLink initiates the magic link authentication process.
-	// It generates a secure link and sends it to the user's email address.
-	// This method handles both login and registration - if the user doesn't exist,
-	// a new account will be created automatically.
+// MagicLinkServiceClient is a client for the auth.v1.MagicLinkService service.
+type MagicLinkServiceClient interface {
+	// SendMagicLink sends a magic link to the specified email.
+	// If the email doesn't exist, a new account will be created.
 	SendMagicLink(context.Context, *connect.Request[v1.SendMagicLinkRequest]) (*connect.Response[v1.SendMagicLinkResponse], error)
-	// VerifyMagicLink authenticates a user using a magic link token.
-	// It verifies the provided token and returns authentication tokens upon success.
+	// VerifyMagicLink validates the magic link OTP and returns auth tokens.
 	VerifyMagicLink(context.Context, *connect.Request[v1.VerifyMagicLinkRequest]) (*connect.Response[v1.VerifyMagicLinkResponse], error)
 }
 
-// NewAuthMagicLinkServiceClient constructs a client for the auth.v1.AuthMagicLinkService service.
-// By default, it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped
-// responses, and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the
+// NewMagicLinkServiceClient constructs a client for the auth.v1.MagicLinkService service. By
+// default, it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses,
+// and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the
 // connect.WithGRPC() or connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewAuthMagicLinkServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) AuthMagicLinkServiceClient {
+func NewMagicLinkServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) MagicLinkServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	authMagicLinkServiceMethods := v1.File_auth_v1_magic_link_proto.Services().ByName("AuthMagicLinkService").Methods()
-	return &authMagicLinkServiceClient{
+	magicLinkServiceMethods := v1.File_auth_v1_magic_link_proto.Services().ByName("MagicLinkService").Methods()
+	return &magicLinkServiceClient{
 		sendMagicLink: connect.NewClient[v1.SendMagicLinkRequest, v1.SendMagicLinkResponse](
 			httpClient,
-			baseURL+AuthMagicLinkServiceSendMagicLinkProcedure,
-			connect.WithSchema(authMagicLinkServiceMethods.ByName("SendMagicLink")),
+			baseURL+MagicLinkServiceSendMagicLinkProcedure,
+			connect.WithSchema(magicLinkServiceMethods.ByName("SendMagicLink")),
 			connect.WithClientOptions(opts...),
 		),
 		verifyMagicLink: connect.NewClient[v1.VerifyMagicLinkRequest, v1.VerifyMagicLinkResponse](
 			httpClient,
-			baseURL+AuthMagicLinkServiceVerifyMagicLinkProcedure,
-			connect.WithSchema(authMagicLinkServiceMethods.ByName("VerifyMagicLink")),
+			baseURL+MagicLinkServiceVerifyMagicLinkProcedure,
+			connect.WithSchema(magicLinkServiceMethods.ByName("VerifyMagicLink")),
 			connect.WithClientOptions(opts...),
 		),
 	}
 }
 
-// authMagicLinkServiceClient implements AuthMagicLinkServiceClient.
-type authMagicLinkServiceClient struct {
+// magicLinkServiceClient implements MagicLinkServiceClient.
+type magicLinkServiceClient struct {
 	sendMagicLink   *connect.Client[v1.SendMagicLinkRequest, v1.SendMagicLinkResponse]
 	verifyMagicLink *connect.Client[v1.VerifyMagicLinkRequest, v1.VerifyMagicLinkResponse]
 }
 
-// SendMagicLink calls auth.v1.AuthMagicLinkService.SendMagicLink.
-func (c *authMagicLinkServiceClient) SendMagicLink(ctx context.Context, req *connect.Request[v1.SendMagicLinkRequest]) (*connect.Response[v1.SendMagicLinkResponse], error) {
+// SendMagicLink calls auth.v1.MagicLinkService.SendMagicLink.
+func (c *magicLinkServiceClient) SendMagicLink(ctx context.Context, req *connect.Request[v1.SendMagicLinkRequest]) (*connect.Response[v1.SendMagicLinkResponse], error) {
 	return c.sendMagicLink.CallUnary(ctx, req)
 }
 
-// VerifyMagicLink calls auth.v1.AuthMagicLinkService.VerifyMagicLink.
-func (c *authMagicLinkServiceClient) VerifyMagicLink(ctx context.Context, req *connect.Request[v1.VerifyMagicLinkRequest]) (*connect.Response[v1.VerifyMagicLinkResponse], error) {
+// VerifyMagicLink calls auth.v1.MagicLinkService.VerifyMagicLink.
+func (c *magicLinkServiceClient) VerifyMagicLink(ctx context.Context, req *connect.Request[v1.VerifyMagicLinkRequest]) (*connect.Response[v1.VerifyMagicLinkResponse], error) {
 	return c.verifyMagicLink.CallUnary(ctx, req)
 }
 
-// AuthMagicLinkServiceHandler is an implementation of the auth.v1.AuthMagicLinkService service.
-type AuthMagicLinkServiceHandler interface {
-	// SendMagicLink initiates the magic link authentication process.
-	// It generates a secure link and sends it to the user's email address.
-	// This method handles both login and registration - if the user doesn't exist,
-	// a new account will be created automatically.
+// MagicLinkServiceHandler is an implementation of the auth.v1.MagicLinkService service.
+type MagicLinkServiceHandler interface {
+	// SendMagicLink sends a magic link to the specified email.
+	// If the email doesn't exist, a new account will be created.
 	SendMagicLink(context.Context, *connect.Request[v1.SendMagicLinkRequest]) (*connect.Response[v1.SendMagicLinkResponse], error)
-	// VerifyMagicLink authenticates a user using a magic link token.
-	// It verifies the provided token and returns authentication tokens upon success.
+	// VerifyMagicLink validates the magic link OTP and returns auth tokens.
 	VerifyMagicLink(context.Context, *connect.Request[v1.VerifyMagicLinkRequest]) (*connect.Response[v1.VerifyMagicLinkResponse], error)
 }
 
-// NewAuthMagicLinkServiceHandler builds an HTTP handler from the service implementation. It returns
-// the path on which to mount the handler and the handler itself.
+// NewMagicLinkServiceHandler builds an HTTP handler from the service implementation. It returns the
+// path on which to mount the handler and the handler itself.
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewAuthMagicLinkServiceHandler(svc AuthMagicLinkServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	authMagicLinkServiceMethods := v1.File_auth_v1_magic_link_proto.Services().ByName("AuthMagicLinkService").Methods()
-	authMagicLinkServiceSendMagicLinkHandler := connect.NewUnaryHandler(
-		AuthMagicLinkServiceSendMagicLinkProcedure,
+func NewMagicLinkServiceHandler(svc MagicLinkServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	magicLinkServiceMethods := v1.File_auth_v1_magic_link_proto.Services().ByName("MagicLinkService").Methods()
+	magicLinkServiceSendMagicLinkHandler := connect.NewUnaryHandler(
+		MagicLinkServiceSendMagicLinkProcedure,
 		svc.SendMagicLink,
-		connect.WithSchema(authMagicLinkServiceMethods.ByName("SendMagicLink")),
+		connect.WithSchema(magicLinkServiceMethods.ByName("SendMagicLink")),
 		connect.WithHandlerOptions(opts...),
 	)
-	authMagicLinkServiceVerifyMagicLinkHandler := connect.NewUnaryHandler(
-		AuthMagicLinkServiceVerifyMagicLinkProcedure,
+	magicLinkServiceVerifyMagicLinkHandler := connect.NewUnaryHandler(
+		MagicLinkServiceVerifyMagicLinkProcedure,
 		svc.VerifyMagicLink,
-		connect.WithSchema(authMagicLinkServiceMethods.ByName("VerifyMagicLink")),
+		connect.WithSchema(magicLinkServiceMethods.ByName("VerifyMagicLink")),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/auth.v1.AuthMagicLinkService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/auth.v1.MagicLinkService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case AuthMagicLinkServiceSendMagicLinkProcedure:
-			authMagicLinkServiceSendMagicLinkHandler.ServeHTTP(w, r)
-		case AuthMagicLinkServiceVerifyMagicLinkProcedure:
-			authMagicLinkServiceVerifyMagicLinkHandler.ServeHTTP(w, r)
+		case MagicLinkServiceSendMagicLinkProcedure:
+			magicLinkServiceSendMagicLinkHandler.ServeHTTP(w, r)
+		case MagicLinkServiceVerifyMagicLinkProcedure:
+			magicLinkServiceVerifyMagicLinkHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
 	})
 }
 
-// UnimplementedAuthMagicLinkServiceHandler returns CodeUnimplemented from all methods.
-type UnimplementedAuthMagicLinkServiceHandler struct{}
+// UnimplementedMagicLinkServiceHandler returns CodeUnimplemented from all methods.
+type UnimplementedMagicLinkServiceHandler struct{}
 
-func (UnimplementedAuthMagicLinkServiceHandler) SendMagicLink(context.Context, *connect.Request[v1.SendMagicLinkRequest]) (*connect.Response[v1.SendMagicLinkResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthMagicLinkService.SendMagicLink is not implemented"))
+func (UnimplementedMagicLinkServiceHandler) SendMagicLink(context.Context, *connect.Request[v1.SendMagicLinkRequest]) (*connect.Response[v1.SendMagicLinkResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.MagicLinkService.SendMagicLink is not implemented"))
 }
 
-func (UnimplementedAuthMagicLinkServiceHandler) VerifyMagicLink(context.Context, *connect.Request[v1.VerifyMagicLinkRequest]) (*connect.Response[v1.VerifyMagicLinkResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthMagicLinkService.VerifyMagicLink is not implemented"))
+func (UnimplementedMagicLinkServiceHandler) VerifyMagicLink(context.Context, *connect.Request[v1.VerifyMagicLinkRequest]) (*connect.Response[v1.VerifyMagicLinkResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.MagicLinkService.VerifyMagicLink is not implemented"))
 }

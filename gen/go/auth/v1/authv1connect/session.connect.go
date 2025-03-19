@@ -21,8 +21,8 @@ import (
 const _ = connect.IsAtLeastVersion1_13_0
 
 const (
-	// AuthSessionServiceName is the fully-qualified name of the AuthSessionService service.
-	AuthSessionServiceName = "auth.v1.AuthSessionService"
+	// SessionServiceName is the fully-qualified name of the SessionService service.
+	SessionServiceName = "auth.v1.SessionService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -33,213 +33,234 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// AuthSessionServiceGetSessionProcedure is the fully-qualified name of the AuthSessionService's
-	// GetSession RPC.
-	AuthSessionServiceGetSessionProcedure = "/auth.v1.AuthSessionService/GetSession"
-	// AuthSessionServiceRefreshSessionProcedure is the fully-qualified name of the AuthSessionService's
-	// RefreshSession RPC.
-	AuthSessionServiceRefreshSessionProcedure = "/auth.v1.AuthSessionService/RefreshSession"
-	// AuthSessionServiceRevokeSessionProcedure is the fully-qualified name of the AuthSessionService's
-	// RevokeSession RPC.
-	AuthSessionServiceRevokeSessionProcedure = "/auth.v1.AuthSessionService/RevokeSession"
-	// AuthSessionServiceListSessionsProcedure is the fully-qualified name of the AuthSessionService's
+	// SessionServiceGetSessionProcedure is the fully-qualified name of the SessionService's GetSession
+	// RPC.
+	SessionServiceGetSessionProcedure = "/auth.v1.SessionService/GetSession"
+	// SessionServiceListSessionsProcedure is the fully-qualified name of the SessionService's
 	// ListSessions RPC.
-	AuthSessionServiceListSessionsProcedure = "/auth.v1.AuthSessionService/ListSessions"
-	// AuthSessionServiceRevokeAllSessionsProcedure is the fully-qualified name of the
-	// AuthSessionService's RevokeAllSessions RPC.
-	AuthSessionServiceRevokeAllSessionsProcedure = "/auth.v1.AuthSessionService/RevokeAllSessions"
+	SessionServiceListSessionsProcedure = "/auth.v1.SessionService/ListSessions"
+	// SessionServiceRevokeSessionProcedure is the fully-qualified name of the SessionService's
+	// RevokeSession RPC.
+	SessionServiceRevokeSessionProcedure = "/auth.v1.SessionService/RevokeSession"
+	// SessionServiceRevokeAllSessionsProcedure is the fully-qualified name of the SessionService's
+	// RevokeAllSessions RPC.
+	SessionServiceRevokeAllSessionsProcedure = "/auth.v1.SessionService/RevokeAllSessions"
+	// SessionServiceRevokeOtherSessionsProcedure is the fully-qualified name of the SessionService's
+	// RevokeOtherSessions RPC.
+	SessionServiceRevokeOtherSessionsProcedure = "/auth.v1.SessionService/RevokeOtherSessions"
+	// SessionServiceRefreshTokenProcedure is the fully-qualified name of the SessionService's
+	// RefreshToken RPC.
+	SessionServiceRefreshTokenProcedure = "/auth.v1.SessionService/RefreshToken"
 )
 
-// AuthSessionServiceClient is a client for the auth.v1.AuthSessionService service.
-type AuthSessionServiceClient interface {
-	// GetSession retrieves information about the current authenticated session.
-	// It validates the provided token and returns session details.
+// SessionServiceClient is a client for the auth.v1.SessionService service.
+type SessionServiceClient interface {
+	// GetSession retrieves details about the current session.
 	GetSession(context.Context, *connect.Request[v1.GetSessionRequest]) (*connect.Response[v1.GetSessionResponse], error)
-	// RefreshSession generates new authentication tokens using a refresh token.
-	// It validates the refresh token and issues a new access token.
-	RefreshSession(context.Context, *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error)
-	// RevokeSession invalidates a specific session.
-	// This can be used when a user logs out from a specific device.
-	RevokeSession(context.Context, *connect.Request[v1.RevokeSessionRequest]) (*connect.Response[v1.RevokeSessionResponse], error)
-	// ListSessions returns all active sessions for a user.
-	// This can be used to show users all devices where they're currently logged in.
+	// ListSessions retrieves all active sessions for the current user.
 	ListSessions(context.Context, *connect.Request[v1.ListSessionsRequest]) (*connect.Response[v1.ListSessionsResponse], error)
-	// RevokeAllSessions invalidates all sessions for a user.
-	// This can be used for security purposes or when a user wants to log out from all devices.
+	// RevokeSession terminates a specific session by its ID.
+	RevokeSession(context.Context, *connect.Request[v1.RevokeSessionRequest]) (*connect.Response[v1.RevokeSessionResponse], error)
+	// RevokeAllSessions terminates all sessions for the current user.
 	RevokeAllSessions(context.Context, *connect.Request[v1.RevokeAllSessionsRequest]) (*connect.Response[v1.RevokeAllSessionsResponse], error)
+	// RevokeOtherSessions terminates all sessions except the current one.
+	RevokeOtherSessions(context.Context, *connect.Request[v1.RevokeOtherSessionsRequest]) (*connect.Response[v1.RevokeOtherSessionsResponse], error)
+	// RefreshToken refreshes an expired token using a refresh token.
+	RefreshToken(context.Context, *connect.Request[v1.RefreshTokenRequest]) (*connect.Response[v1.RefreshTokenResponse], error)
 }
 
-// NewAuthSessionServiceClient constructs a client for the auth.v1.AuthSessionService service. By
-// default, it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses,
-// and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the
-// connect.WithGRPC() or connect.WithGRPCWeb() options.
+// NewSessionServiceClient constructs a client for the auth.v1.SessionService service. By default,
+// it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and
+// sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC()
+// or connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewAuthSessionServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) AuthSessionServiceClient {
+func NewSessionServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) SessionServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	authSessionServiceMethods := v1.File_auth_v1_session_proto.Services().ByName("AuthSessionService").Methods()
-	return &authSessionServiceClient{
+	sessionServiceMethods := v1.File_auth_v1_session_proto.Services().ByName("SessionService").Methods()
+	return &sessionServiceClient{
 		getSession: connect.NewClient[v1.GetSessionRequest, v1.GetSessionResponse](
 			httpClient,
-			baseURL+AuthSessionServiceGetSessionProcedure,
-			connect.WithSchema(authSessionServiceMethods.ByName("GetSession")),
-			connect.WithClientOptions(opts...),
-		),
-		refreshSession: connect.NewClient[v1.RefreshSessionRequest, v1.RefreshSessionResponse](
-			httpClient,
-			baseURL+AuthSessionServiceRefreshSessionProcedure,
-			connect.WithSchema(authSessionServiceMethods.ByName("RefreshSession")),
-			connect.WithClientOptions(opts...),
-		),
-		revokeSession: connect.NewClient[v1.RevokeSessionRequest, v1.RevokeSessionResponse](
-			httpClient,
-			baseURL+AuthSessionServiceRevokeSessionProcedure,
-			connect.WithSchema(authSessionServiceMethods.ByName("RevokeSession")),
+			baseURL+SessionServiceGetSessionProcedure,
+			connect.WithSchema(sessionServiceMethods.ByName("GetSession")),
 			connect.WithClientOptions(opts...),
 		),
 		listSessions: connect.NewClient[v1.ListSessionsRequest, v1.ListSessionsResponse](
 			httpClient,
-			baseURL+AuthSessionServiceListSessionsProcedure,
-			connect.WithSchema(authSessionServiceMethods.ByName("ListSessions")),
+			baseURL+SessionServiceListSessionsProcedure,
+			connect.WithSchema(sessionServiceMethods.ByName("ListSessions")),
+			connect.WithClientOptions(opts...),
+		),
+		revokeSession: connect.NewClient[v1.RevokeSessionRequest, v1.RevokeSessionResponse](
+			httpClient,
+			baseURL+SessionServiceRevokeSessionProcedure,
+			connect.WithSchema(sessionServiceMethods.ByName("RevokeSession")),
 			connect.WithClientOptions(opts...),
 		),
 		revokeAllSessions: connect.NewClient[v1.RevokeAllSessionsRequest, v1.RevokeAllSessionsResponse](
 			httpClient,
-			baseURL+AuthSessionServiceRevokeAllSessionsProcedure,
-			connect.WithSchema(authSessionServiceMethods.ByName("RevokeAllSessions")),
+			baseURL+SessionServiceRevokeAllSessionsProcedure,
+			connect.WithSchema(sessionServiceMethods.ByName("RevokeAllSessions")),
+			connect.WithClientOptions(opts...),
+		),
+		revokeOtherSessions: connect.NewClient[v1.RevokeOtherSessionsRequest, v1.RevokeOtherSessionsResponse](
+			httpClient,
+			baseURL+SessionServiceRevokeOtherSessionsProcedure,
+			connect.WithSchema(sessionServiceMethods.ByName("RevokeOtherSessions")),
+			connect.WithClientOptions(opts...),
+		),
+		refreshToken: connect.NewClient[v1.RefreshTokenRequest, v1.RefreshTokenResponse](
+			httpClient,
+			baseURL+SessionServiceRefreshTokenProcedure,
+			connect.WithSchema(sessionServiceMethods.ByName("RefreshToken")),
 			connect.WithClientOptions(opts...),
 		),
 	}
 }
 
-// authSessionServiceClient implements AuthSessionServiceClient.
-type authSessionServiceClient struct {
-	getSession        *connect.Client[v1.GetSessionRequest, v1.GetSessionResponse]
-	refreshSession    *connect.Client[v1.RefreshSessionRequest, v1.RefreshSessionResponse]
-	revokeSession     *connect.Client[v1.RevokeSessionRequest, v1.RevokeSessionResponse]
-	listSessions      *connect.Client[v1.ListSessionsRequest, v1.ListSessionsResponse]
-	revokeAllSessions *connect.Client[v1.RevokeAllSessionsRequest, v1.RevokeAllSessionsResponse]
+// sessionServiceClient implements SessionServiceClient.
+type sessionServiceClient struct {
+	getSession          *connect.Client[v1.GetSessionRequest, v1.GetSessionResponse]
+	listSessions        *connect.Client[v1.ListSessionsRequest, v1.ListSessionsResponse]
+	revokeSession       *connect.Client[v1.RevokeSessionRequest, v1.RevokeSessionResponse]
+	revokeAllSessions   *connect.Client[v1.RevokeAllSessionsRequest, v1.RevokeAllSessionsResponse]
+	revokeOtherSessions *connect.Client[v1.RevokeOtherSessionsRequest, v1.RevokeOtherSessionsResponse]
+	refreshToken        *connect.Client[v1.RefreshTokenRequest, v1.RefreshTokenResponse]
 }
 
-// GetSession calls auth.v1.AuthSessionService.GetSession.
-func (c *authSessionServiceClient) GetSession(ctx context.Context, req *connect.Request[v1.GetSessionRequest]) (*connect.Response[v1.GetSessionResponse], error) {
+// GetSession calls auth.v1.SessionService.GetSession.
+func (c *sessionServiceClient) GetSession(ctx context.Context, req *connect.Request[v1.GetSessionRequest]) (*connect.Response[v1.GetSessionResponse], error) {
 	return c.getSession.CallUnary(ctx, req)
 }
 
-// RefreshSession calls auth.v1.AuthSessionService.RefreshSession.
-func (c *authSessionServiceClient) RefreshSession(ctx context.Context, req *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error) {
-	return c.refreshSession.CallUnary(ctx, req)
-}
-
-// RevokeSession calls auth.v1.AuthSessionService.RevokeSession.
-func (c *authSessionServiceClient) RevokeSession(ctx context.Context, req *connect.Request[v1.RevokeSessionRequest]) (*connect.Response[v1.RevokeSessionResponse], error) {
-	return c.revokeSession.CallUnary(ctx, req)
-}
-
-// ListSessions calls auth.v1.AuthSessionService.ListSessions.
-func (c *authSessionServiceClient) ListSessions(ctx context.Context, req *connect.Request[v1.ListSessionsRequest]) (*connect.Response[v1.ListSessionsResponse], error) {
+// ListSessions calls auth.v1.SessionService.ListSessions.
+func (c *sessionServiceClient) ListSessions(ctx context.Context, req *connect.Request[v1.ListSessionsRequest]) (*connect.Response[v1.ListSessionsResponse], error) {
 	return c.listSessions.CallUnary(ctx, req)
 }
 
-// RevokeAllSessions calls auth.v1.AuthSessionService.RevokeAllSessions.
-func (c *authSessionServiceClient) RevokeAllSessions(ctx context.Context, req *connect.Request[v1.RevokeAllSessionsRequest]) (*connect.Response[v1.RevokeAllSessionsResponse], error) {
+// RevokeSession calls auth.v1.SessionService.RevokeSession.
+func (c *sessionServiceClient) RevokeSession(ctx context.Context, req *connect.Request[v1.RevokeSessionRequest]) (*connect.Response[v1.RevokeSessionResponse], error) {
+	return c.revokeSession.CallUnary(ctx, req)
+}
+
+// RevokeAllSessions calls auth.v1.SessionService.RevokeAllSessions.
+func (c *sessionServiceClient) RevokeAllSessions(ctx context.Context, req *connect.Request[v1.RevokeAllSessionsRequest]) (*connect.Response[v1.RevokeAllSessionsResponse], error) {
 	return c.revokeAllSessions.CallUnary(ctx, req)
 }
 
-// AuthSessionServiceHandler is an implementation of the auth.v1.AuthSessionService service.
-type AuthSessionServiceHandler interface {
-	// GetSession retrieves information about the current authenticated session.
-	// It validates the provided token and returns session details.
-	GetSession(context.Context, *connect.Request[v1.GetSessionRequest]) (*connect.Response[v1.GetSessionResponse], error)
-	// RefreshSession generates new authentication tokens using a refresh token.
-	// It validates the refresh token and issues a new access token.
-	RefreshSession(context.Context, *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error)
-	// RevokeSession invalidates a specific session.
-	// This can be used when a user logs out from a specific device.
-	RevokeSession(context.Context, *connect.Request[v1.RevokeSessionRequest]) (*connect.Response[v1.RevokeSessionResponse], error)
-	// ListSessions returns all active sessions for a user.
-	// This can be used to show users all devices where they're currently logged in.
-	ListSessions(context.Context, *connect.Request[v1.ListSessionsRequest]) (*connect.Response[v1.ListSessionsResponse], error)
-	// RevokeAllSessions invalidates all sessions for a user.
-	// This can be used for security purposes or when a user wants to log out from all devices.
-	RevokeAllSessions(context.Context, *connect.Request[v1.RevokeAllSessionsRequest]) (*connect.Response[v1.RevokeAllSessionsResponse], error)
+// RevokeOtherSessions calls auth.v1.SessionService.RevokeOtherSessions.
+func (c *sessionServiceClient) RevokeOtherSessions(ctx context.Context, req *connect.Request[v1.RevokeOtherSessionsRequest]) (*connect.Response[v1.RevokeOtherSessionsResponse], error) {
+	return c.revokeOtherSessions.CallUnary(ctx, req)
 }
 
-// NewAuthSessionServiceHandler builds an HTTP handler from the service implementation. It returns
-// the path on which to mount the handler and the handler itself.
+// RefreshToken calls auth.v1.SessionService.RefreshToken.
+func (c *sessionServiceClient) RefreshToken(ctx context.Context, req *connect.Request[v1.RefreshTokenRequest]) (*connect.Response[v1.RefreshTokenResponse], error) {
+	return c.refreshToken.CallUnary(ctx, req)
+}
+
+// SessionServiceHandler is an implementation of the auth.v1.SessionService service.
+type SessionServiceHandler interface {
+	// GetSession retrieves details about the current session.
+	GetSession(context.Context, *connect.Request[v1.GetSessionRequest]) (*connect.Response[v1.GetSessionResponse], error)
+	// ListSessions retrieves all active sessions for the current user.
+	ListSessions(context.Context, *connect.Request[v1.ListSessionsRequest]) (*connect.Response[v1.ListSessionsResponse], error)
+	// RevokeSession terminates a specific session by its ID.
+	RevokeSession(context.Context, *connect.Request[v1.RevokeSessionRequest]) (*connect.Response[v1.RevokeSessionResponse], error)
+	// RevokeAllSessions terminates all sessions for the current user.
+	RevokeAllSessions(context.Context, *connect.Request[v1.RevokeAllSessionsRequest]) (*connect.Response[v1.RevokeAllSessionsResponse], error)
+	// RevokeOtherSessions terminates all sessions except the current one.
+	RevokeOtherSessions(context.Context, *connect.Request[v1.RevokeOtherSessionsRequest]) (*connect.Response[v1.RevokeOtherSessionsResponse], error)
+	// RefreshToken refreshes an expired token using a refresh token.
+	RefreshToken(context.Context, *connect.Request[v1.RefreshTokenRequest]) (*connect.Response[v1.RefreshTokenResponse], error)
+}
+
+// NewSessionServiceHandler builds an HTTP handler from the service implementation. It returns the
+// path on which to mount the handler and the handler itself.
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewAuthSessionServiceHandler(svc AuthSessionServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	authSessionServiceMethods := v1.File_auth_v1_session_proto.Services().ByName("AuthSessionService").Methods()
-	authSessionServiceGetSessionHandler := connect.NewUnaryHandler(
-		AuthSessionServiceGetSessionProcedure,
+func NewSessionServiceHandler(svc SessionServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	sessionServiceMethods := v1.File_auth_v1_session_proto.Services().ByName("SessionService").Methods()
+	sessionServiceGetSessionHandler := connect.NewUnaryHandler(
+		SessionServiceGetSessionProcedure,
 		svc.GetSession,
-		connect.WithSchema(authSessionServiceMethods.ByName("GetSession")),
+		connect.WithSchema(sessionServiceMethods.ByName("GetSession")),
 		connect.WithHandlerOptions(opts...),
 	)
-	authSessionServiceRefreshSessionHandler := connect.NewUnaryHandler(
-		AuthSessionServiceRefreshSessionProcedure,
-		svc.RefreshSession,
-		connect.WithSchema(authSessionServiceMethods.ByName("RefreshSession")),
-		connect.WithHandlerOptions(opts...),
-	)
-	authSessionServiceRevokeSessionHandler := connect.NewUnaryHandler(
-		AuthSessionServiceRevokeSessionProcedure,
-		svc.RevokeSession,
-		connect.WithSchema(authSessionServiceMethods.ByName("RevokeSession")),
-		connect.WithHandlerOptions(opts...),
-	)
-	authSessionServiceListSessionsHandler := connect.NewUnaryHandler(
-		AuthSessionServiceListSessionsProcedure,
+	sessionServiceListSessionsHandler := connect.NewUnaryHandler(
+		SessionServiceListSessionsProcedure,
 		svc.ListSessions,
-		connect.WithSchema(authSessionServiceMethods.ByName("ListSessions")),
+		connect.WithSchema(sessionServiceMethods.ByName("ListSessions")),
 		connect.WithHandlerOptions(opts...),
 	)
-	authSessionServiceRevokeAllSessionsHandler := connect.NewUnaryHandler(
-		AuthSessionServiceRevokeAllSessionsProcedure,
+	sessionServiceRevokeSessionHandler := connect.NewUnaryHandler(
+		SessionServiceRevokeSessionProcedure,
+		svc.RevokeSession,
+		connect.WithSchema(sessionServiceMethods.ByName("RevokeSession")),
+		connect.WithHandlerOptions(opts...),
+	)
+	sessionServiceRevokeAllSessionsHandler := connect.NewUnaryHandler(
+		SessionServiceRevokeAllSessionsProcedure,
 		svc.RevokeAllSessions,
-		connect.WithSchema(authSessionServiceMethods.ByName("RevokeAllSessions")),
+		connect.WithSchema(sessionServiceMethods.ByName("RevokeAllSessions")),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/auth.v1.AuthSessionService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	sessionServiceRevokeOtherSessionsHandler := connect.NewUnaryHandler(
+		SessionServiceRevokeOtherSessionsProcedure,
+		svc.RevokeOtherSessions,
+		connect.WithSchema(sessionServiceMethods.ByName("RevokeOtherSessions")),
+		connect.WithHandlerOptions(opts...),
+	)
+	sessionServiceRefreshTokenHandler := connect.NewUnaryHandler(
+		SessionServiceRefreshTokenProcedure,
+		svc.RefreshToken,
+		connect.WithSchema(sessionServiceMethods.ByName("RefreshToken")),
+		connect.WithHandlerOptions(opts...),
+	)
+	return "/auth.v1.SessionService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case AuthSessionServiceGetSessionProcedure:
-			authSessionServiceGetSessionHandler.ServeHTTP(w, r)
-		case AuthSessionServiceRefreshSessionProcedure:
-			authSessionServiceRefreshSessionHandler.ServeHTTP(w, r)
-		case AuthSessionServiceRevokeSessionProcedure:
-			authSessionServiceRevokeSessionHandler.ServeHTTP(w, r)
-		case AuthSessionServiceListSessionsProcedure:
-			authSessionServiceListSessionsHandler.ServeHTTP(w, r)
-		case AuthSessionServiceRevokeAllSessionsProcedure:
-			authSessionServiceRevokeAllSessionsHandler.ServeHTTP(w, r)
+		case SessionServiceGetSessionProcedure:
+			sessionServiceGetSessionHandler.ServeHTTP(w, r)
+		case SessionServiceListSessionsProcedure:
+			sessionServiceListSessionsHandler.ServeHTTP(w, r)
+		case SessionServiceRevokeSessionProcedure:
+			sessionServiceRevokeSessionHandler.ServeHTTP(w, r)
+		case SessionServiceRevokeAllSessionsProcedure:
+			sessionServiceRevokeAllSessionsHandler.ServeHTTP(w, r)
+		case SessionServiceRevokeOtherSessionsProcedure:
+			sessionServiceRevokeOtherSessionsHandler.ServeHTTP(w, r)
+		case SessionServiceRefreshTokenProcedure:
+			sessionServiceRefreshTokenHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
 	})
 }
 
-// UnimplementedAuthSessionServiceHandler returns CodeUnimplemented from all methods.
-type UnimplementedAuthSessionServiceHandler struct{}
+// UnimplementedSessionServiceHandler returns CodeUnimplemented from all methods.
+type UnimplementedSessionServiceHandler struct{}
 
-func (UnimplementedAuthSessionServiceHandler) GetSession(context.Context, *connect.Request[v1.GetSessionRequest]) (*connect.Response[v1.GetSessionResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthSessionService.GetSession is not implemented"))
+func (UnimplementedSessionServiceHandler) GetSession(context.Context, *connect.Request[v1.GetSessionRequest]) (*connect.Response[v1.GetSessionResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.SessionService.GetSession is not implemented"))
 }
 
-func (UnimplementedAuthSessionServiceHandler) RefreshSession(context.Context, *connect.Request[v1.RefreshSessionRequest]) (*connect.Response[v1.RefreshSessionResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthSessionService.RefreshSession is not implemented"))
+func (UnimplementedSessionServiceHandler) ListSessions(context.Context, *connect.Request[v1.ListSessionsRequest]) (*connect.Response[v1.ListSessionsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.SessionService.ListSessions is not implemented"))
 }
 
-func (UnimplementedAuthSessionServiceHandler) RevokeSession(context.Context, *connect.Request[v1.RevokeSessionRequest]) (*connect.Response[v1.RevokeSessionResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthSessionService.RevokeSession is not implemented"))
+func (UnimplementedSessionServiceHandler) RevokeSession(context.Context, *connect.Request[v1.RevokeSessionRequest]) (*connect.Response[v1.RevokeSessionResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.SessionService.RevokeSession is not implemented"))
 }
 
-func (UnimplementedAuthSessionServiceHandler) ListSessions(context.Context, *connect.Request[v1.ListSessionsRequest]) (*connect.Response[v1.ListSessionsResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthSessionService.ListSessions is not implemented"))
+func (UnimplementedSessionServiceHandler) RevokeAllSessions(context.Context, *connect.Request[v1.RevokeAllSessionsRequest]) (*connect.Response[v1.RevokeAllSessionsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.SessionService.RevokeAllSessions is not implemented"))
 }
 
-func (UnimplementedAuthSessionServiceHandler) RevokeAllSessions(context.Context, *connect.Request[v1.RevokeAllSessionsRequest]) (*connect.Response[v1.RevokeAllSessionsResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthSessionService.RevokeAllSessions is not implemented"))
+func (UnimplementedSessionServiceHandler) RevokeOtherSessions(context.Context, *connect.Request[v1.RevokeOtherSessionsRequest]) (*connect.Response[v1.RevokeOtherSessionsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.SessionService.RevokeOtherSessions is not implemented"))
+}
+
+func (UnimplementedSessionServiceHandler) RefreshToken(context.Context, *connect.Request[v1.RefreshTokenRequest]) (*connect.Response[v1.RefreshTokenResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.SessionService.RefreshToken is not implemented"))
 }
