@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package common.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option go_package = "github.com/authhubdev/apis/gen/go/common/v1;commonv1";
+
+// SuccessResponse is a simple response indicating operation success.
+message SuccessResponse {
+  // Indicates whether the operation was successful.
+  bool success = 1;
+  
+  // Optional message providing additional context.
+  google.protobuf.StringValue message = 2;
+}
+
+// Pagination provides standard pagination parameters for list requests.
+message PaginationRequest {
+  // Page number (0-indexed).
+  uint32 page = 1;
+  
+  // Number of items per page.
+  uint32 per_page = 2;
+}
+
+// PaginationResponse provides standard pagination metadata for list responses.
+message PaginationResponse {
+  // Total number of items available.
+  uint32 total = 1;
+  
+  // Current page number (0-indexed).
+  uint32 page = 2;
+  
+  // Number of items per page.
+  uint32 per_page = 3;
+  
+  // Number of pages available.
+  uint32 pages = 4;
+}
+
+// TimeRange provides a standard time range for filtering.
+message TimeRange {
+  // Start time.
+  google.protobuf.Timestamp from = 1;
+  
+  // End time.
+  google.protobuf.Timestamp to = 2;
+}
