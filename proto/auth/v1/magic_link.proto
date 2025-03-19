@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package auth.v1;
+
+import "auth/v1/common.proto";
+
+option go_package = "github.com/authhubdev/apis/gen/go/auth/v1;authv1";
+
+// AuthMagicLinkService provides magic link-based authentication operations.
+service AuthMagicLinkService {
+  // SendMagicLink initiates the magic link authentication process.
+  // It generates a secure link and sends it to the user's email address.
+  // This method handles both login and registration - if the user doesn't exist,
+  // a new account will be created automatically.
+  rpc SendMagicLink(SendMagicLinkRequest) returns (SendMagicLinkResponse);
+
+  // VerifyMagicLink authenticates a user using a magic link token.
+  // It verifies the provided token and returns authentication tokens upon success.
+  rpc VerifyMagicLink(VerifyMagicLinkRequest) returns (VerifyMagicLinkResponse);
+}
+
+// SendMagicLinkRequest contains information for generating a magic link.
+message SendMagicLinkRequest {
+  // Email address of the user.
+  // Must be a valid email format between 5 and 255 characters.
+  string email = 1;
+  
+  // Optional user name.
+  // If provided, must be between 2 and 100 characters.
+  // Only used when creating a new user account.
+  optional string name = 2;
+  
+  // Optional redirect URL after successful authentication.
+  // If provided, user will be redirected to this URL with the token as a parameter.
+  optional string redirect_url = 3;
+  
+  // Optional time-to-live for the magic link in seconds.
+  // If not provided, a default value will be used.
+  optional int32 ttl_seconds = 4;
+}
+
+// SendMagicLinkResponse indicates the magic link generation result.
+message SendMagicLinkResponse {
+  // Indicates whether the magic link was successfully generated and sent.
+  // Note: For security reasons, this may return true even if the email doesn't exist.
+  SuccessResponse result = 1;
+  
+  // Optional expiration time in Unix timestamp format.
+  optional int64 expires_at = 2;
+  
+  // Indicates whether a new user account was created.
+  // Will be true for new registrations, false for existing users.
+  optional bool is_new_user = 3;
+  
+  // User ID of the user.
+  // Only provided for new user registrations.
+  optional string user_id = 4;
+}
+
+// VerifyMagicLinkRequest contains the token for verification.
+message VerifyMagicLinkRequest {
+  // Magic link token received via email.
+  // Must not be empty.
+  string token = 1;
+}
+
+// VerifyMagicLinkResponse contains the authentication result.
+message VerifyMagicLinkResponse {
+  // Authentication data including tokens and user information.
+  AuthResponse auth = 1;
+}

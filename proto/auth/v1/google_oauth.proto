@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package auth.v1;
+
+import "auth/v1/common.proto";
+
+option go_package = "github.com/authhubdev/apis/gen/go/auth/v1;authv1";
+
+// AuthGoogleOAuthService provides Google OAuth authentication operations.
+service AuthGoogleOAuthService {
+  // GetAuthURL generates a Google OAuth authorization URL.
+  // This URL is used to redirect users to Google's authentication page.
+  rpc GetAuthURL(GetAuthURLRequest) returns (GetAuthURLResponse);
+
+  // ExchangeAuthCode exchanges a Google OAuth authorization code for authentication tokens.
+  // It validates the authorization code and issues authentication tokens upon success.
+  rpc ExchangeAuthCode(ExchangeAuthCodeRequest) returns (ExchangeAuthCodeResponse);
+}
+
+// GetAuthURLRequest contains parameters for generating a Google OAuth URL.
+message GetAuthURLRequest {
+  // URI to redirect to after authorization
+  string redirect_uri = 1;
+  
+  // Optional state parameter for CSRF protection
+  optional string state = 2;
+}
+
+// GetAuthURLResponse contains the Google OAuth authorization URL.
+message GetAuthURLResponse {
+  // URL to redirect users to for Google authentication
+  string auth_url = 1;
+  
+  // State parameter echoed back from the request or auto-generated if not provided
+  string state = 2;
+}
+
+// ExchangeAuthCodeRequest contains parameters for exchanging a Google authorization code.
+message ExchangeAuthCodeRequest {
+  // The authorization code received from Google
+  string code = 1;
+  
+  // Redirect URI used in the authorization request
+  string redirect_uri = 2;
+  
+  // State parameter from the original request for verification
+  string state = 3;
+}
+
+// ExchangeAuthCodeResponse contains the authentication result.
+message ExchangeAuthCodeResponse {
+  // Authentication data including tokens and user information
+  AuthResponse auth = 1;
+}

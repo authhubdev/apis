@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package auth.v1;
+
+option go_package = "github.com/authhubdev/apis/gen/go/auth/v1;authv1";
+
+// AuthTokens contains standard authentication tokens returned by auth operations.
+message AuthTokens {
+  // Authentication token to be used for authorized requests.
+  string token = 1;
+  
+  // Token expiration time in Unix timestamp format.
+  int64 expires_at = 2;
+  
+  // Refresh token for obtaining a new access token when the current one expires.
+  string refresh_token = 3;
+}
+
+// UserInfo contains basic user information returned by auth operations.
+message UserInfo {
+  // Unique identifier for the user.
+  string user_id = 1;
+  
+  // User's email address.
+  string email = 2;
+  
+  // Optional user name.
+  optional string name = 3;
+  
+  // Indicates if the user has a verified email.
+  bool email_verified = 4;
+  
+  // Creation timestamp of the user account.
+  int64 created_at = 5;
+  
+  // Last update timestamp of the user account.
+  int64 updated_at = 6;
+}
+
+// AuthResponse contains the complete authentication result.
+message AuthResponse {
+  // Authentication tokens for the user.
+  AuthTokens tokens = 1;
+  
+  // User information.
+  UserInfo user = 2;
+  
+  // Indicates if this was a new user registration.
+  bool is_new_user = 3;
+}
+
+// SuccessResponse is a simple response indicating operation success.
+message SuccessResponse {
+  // Indicates whether the operation was successful.
+  bool success = 1;
+  
+  // Optional message providing additional context.
+  optional string message = 2;
+}
