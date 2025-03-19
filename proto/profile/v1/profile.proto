@@ -1,0 +1,197 @@
+syntax = "proto3";
+
+package profile.v1;
+
+import "auth/v1/common.proto";
+import "common/v1/common.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option go_package = "github.com/authhubdev/apis/gen/go/profile/v1;profilev1";
+
+// ProfileService provides methods for managing user profiles.
+// All operations apply only to the authenticated user's own profile.
+service ProfileService {
+  // GetProfile retrieves the current user's profile information.
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse) {}
+
+  // UpdateEmail initiates the process to change the user's email address.
+  // This typically requires verification of the new email.
+  rpc UpdateEmail(UpdateEmailRequest) returns (UpdateEmailResponse) {}
+
+  // ChangePassword updates the user's password.
+  // Requires verification of the current password for security.
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {}
+
+  // VerifyEmail confirms a user's email address using a verification OTP.
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {}
+
+  // ResendVerificationEmail sends a new verification email to the user.
+  rpc ResendVerificationEmail(ResendVerificationEmailRequest) returns (ResendVerificationEmailResponse) {}
+
+  // GetAvatarUploadURL generates a pre-signed URL for uploading a user avatar.
+  rpc GetAvatarUploadURL(GetAvatarUploadURLRequest) returns (GetAvatarUploadURLResponse) {}
+
+  // UpdateAvatar updates the user's profile with the URL of an uploaded avatar.
+  rpc UpdateAvatar(UpdateAvatarRequest) returns (UpdateAvatarResponse) {}
+
+  // RequestAccountDeletion initiates the process to delete a user's account.
+  // This typically sends a confirmation email with a deletion OTP.
+  rpc RequestAccountDeletion(RequestAccountDeletionRequest) returns (RequestAccountDeletionResponse) {}
+
+  // ConfirmAccountDeletion permanently deletes a user's account after verification.
+  rpc ConfirmAccountDeletion(ConfirmAccountDeletionRequest) returns (ConfirmAccountDeletionResponse) {}
+
+  // UpdateProfileName updates the user's display name.
+  rpc UpdateProfileName(UpdateProfileNameRequest) returns (UpdateProfileNameResponse) {}
+}
+
+// UserProfile contains comprehensive information about a user's profile.
+message UserProfile {
+  // Unique identifier for the user.
+  string id = 1;
+  
+  // User's display name.
+  google.protobuf.StringValue name = 2;
+  
+  // User's email address.
+  string email = 3;
+  
+  // Indicates whether the email has been confirmed.
+  bool email_confirmed = 4;
+  
+  // URL to the user's avatar image.
+  google.protobuf.StringValue avatar_url = 5;
+  
+  // Creation timestamp.
+  google.protobuf.Timestamp created_at = 6;
+  
+  // Last update timestamp.
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+// GetProfileRequest is an empty request as it operates on the authenticated user.
+message GetProfileRequest {
+}
+
+// GetProfileResponse contains the user's profile information.
+message GetProfileResponse {
+  // User profile information.
+  UserProfile profile = 1;
+}
+
+// UpdateEmailRequest contains the new email the user wants to change to.
+message UpdateEmailRequest {
+  // New email address for the user.
+  string new_email = 1;
+}
+
+// UpdateEmailResponse indicates if the email update process was initiated.
+message UpdateEmailResponse {
+  // Operation result.
+  common.v1.SuccessResponse result = 1;
+}
+
+// ChangePasswordRequest contains the current and new password for changing password.
+message ChangePasswordRequest {
+  // User's current password for verification.
+  string current_password = 1;
+  
+  // New password to set.
+  string new_password = 2;
+}
+
+// ChangePasswordResponse indicates if the password was successfully changed.
+message ChangePasswordResponse {
+  // Operation result.
+  common.v1.SuccessResponse result = 1;
+}
+
+// VerifyEmailRequest contains the OTP verification for email.
+message VerifyEmailRequest {
+  // OTP verification data.
+  auth.v1.OTPVerification verification = 1;
+}
+
+// VerifyEmailResponse indicates if the email was successfully verified.
+message VerifyEmailResponse {
+  // Operation result.
+  common.v1.SuccessResponse result = 1;
+}
+
+// ResendVerificationEmailRequest is an empty request as it operates on the authenticated user.
+message ResendVerificationEmailRequest {
+}
+
+// ResendVerificationEmailResponse indicates if a new verification email was sent.
+message ResendVerificationEmailResponse {
+  // Operation result.
+  common.v1.SuccessResponse result = 1;
+}
+
+// GetAvatarUploadURLRequest contains optional parameters for the avatar upload.
+message GetAvatarUploadURLRequest {
+  // Optional file type/extension (e.g., "jpg", "png")
+  google.protobuf.StringValue file_type = 1;
+  
+  // Optional maximum file size in bytes
+  google.protobuf.UInt64Value max_size = 2;
+}
+
+// GetAvatarUploadURLResponse contains the URL for uploading an avatar.
+message GetAvatarUploadURLResponse {
+  // Pre-signed URL for uploading the avatar file.
+  string upload_url = 1;
+  
+  // URL where the file will be accessible after upload.
+  string file_url = 2;
+  
+  // Expiration time for the upload URL in seconds.
+  uint64 expires_in = 3;
+}
+
+// UpdateAvatarRequest contains the URL of the uploaded avatar.
+message UpdateAvatarRequest {
+  // URL of the uploaded avatar image.
+  string avatar_url = 1;
+}
+
+// UpdateAvatarResponse indicates if the avatar was successfully updated.
+message UpdateAvatarResponse {
+  // Operation result.
+  common.v1.SuccessResponse result = 1;
+}
+
+// RequestAccountDeletionRequest is an empty request as it operates on the authenticated user.
+message RequestAccountDeletionRequest {
+}
+
+// RequestAccountDeletionResponse indicates if the account deletion request was processed.
+message RequestAccountDeletionResponse {
+  // Operation result.
+  common.v1.SuccessResponse result = 1;
+}
+
+// ConfirmAccountDeletionRequest contains the OTP verification for account deletion.
+message ConfirmAccountDeletionRequest {
+  // OTP verification data.
+  auth.v1.OTPVerification verification = 1;
+}
+
+// ConfirmAccountDeletionResponse indicates if the account was successfully deleted.
+message ConfirmAccountDeletionResponse {
+  // Operation result.
+  common.v1.SuccessResponse result = 1;
+}
+
+// UpdateProfileNameRequest contains the new name for the user.
+message UpdateProfileNameRequest {
+  // New display name for the user.
+  string name = 1;
+}
+
+// UpdateProfileNameResponse indicates if the name was successfully updated.
+message UpdateProfileNameResponse {
+  // Operation result.
+  common.v1.SuccessResponse result = 1;
+}
